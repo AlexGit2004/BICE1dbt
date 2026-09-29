@@ -1,0 +1,51 @@
+version: 2
+
+sources:
+  - name: bronze
+    description: "Capa Bronze — datos crudos de Airbyte con prefijos por fuente"
+    database: "{{ env_var('AIRBYTE_DATABASE', 'AIRBYTE') }}"
+    schema: CAPABRONCE
+    tables:
+      # ============ F1 MySQL — core operacional ============
+      - name: mysql_cliente
+        identifier: mysql_cliente
+      - name: mysql_caracteristica_cliente
+      - name: mysql_tipo_identificacion
+      - name: mysql_departamento
+      - name: mysql_tipo_producto
+      - name: mysql_producto_crediticio
+      - name: mysql_agencia
+      - name: mysql_solicitud_credito
+      - name: mysql_prestamo
+      - name: mysql_estado_prestamo_tipo
+      - name: mysql_tipo_rechazo
+      - name: mysql_pago
+      - name: mysql_tipo_pago
+      - name: mysql_garantia
+      - name: mysql_tipo_garantia
+
+      # ============ F2 PostgreSQL — procesos penales ============
+      - name: pgsql_categoria_delito
+      - name: pgsql_tipo_delito
+      - name: pgsql_estado_proceso_penal
+      - name: pgsql_proceso_penal
+      - name: pgsql_consolidado_antecedentes
+
+      # ============ F3 SQL Server — central de riesgos ============
+      - name: server_tipo_entidad_financiera
+      - name: server_deudor_central_riesgos
+      - name: server_deuda_cr
+      - name: server_score_riesgo_cr
+
+      # ============ F4 MariaDB — registro mercantil ============
+      - name: maria_tipo_empresa_rm
+      - name: maria_empresa_registro_mercantil
+      - name: maria_accionista_representante_rm
+      - name: maria_situacion_tributaria_rm
+
+      # ============ F5 MongoDB — Open Finance ============
+      - name: mongo_open_finance_bancos
+      - name: mongo_open_finance_clientes_asociados
+
+      # ============ F6 CSV — situación laboral ============
+      - name: csv_situacion_laboral

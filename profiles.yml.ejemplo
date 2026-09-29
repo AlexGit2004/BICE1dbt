@@ -1,0 +1,38 @@
+# =============================================================================
+# profiles.yml de ejemplo para ce1copy
+# =============================================================================
+# NO se usa directamente: copialo a C:\Users\Val\.dbt\profiles.yml y completa
+# los valores. Se versiona como .ejemplo para que el repo no lleve la
+# contrasena.
+#
+# En Windows PowerShell:
+#   Copy-Item profiles.yml.ejemplo $env:USERPROFILE\.dbt\profiles.yml
+#   New-Item -ItemType Directory -Force $env:USERPROFILE\.dbt
+#
+# La contrasena se lee de la variable de entorno SNOWFLAKE_PASSWORD, no se
+# escribe aqui. Definirla antes de correr dbt:
+#   $env:SNOWFLAKE_PASSWORD='<tu contrasena>'
+#   $env:DBT_PII_SALT='<sal secreto para el hash de PII>'
+#
+# target.schema: CSILVER es solo el default. El macro generate_schema_name
+# fuerza el schema real desde dbt_project.yml, asi que staging/intermediate
+# caen en CSILVER y gold en CGOLD sin importar que diga target.schema.
+# =============================================================================
+
+ce1copy:
+  target: dev
+  outputs:
+    dev:
+      type: snowflake
+      account: UWXDGFU-GJ05542
+      user: HECTOR
+      password: "{{ env_var('SNOWFLAKE_PASSWORD') }}"
+      role: AIRBYTE_ROLE
+      database: AIRBYTE_DATABASE
+      warehouse: COMPUTE_WH
+      schema: CSILVER
+      threads: 8
+      client_session_keep_alive: true
+      # sin retries agresivos: si el warehouse se pausa, dbt debe avisar, no
+      # reintentar en silencio y dejar el build a medias
+      retries: 1

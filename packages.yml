@@ -1,0 +1,6 @@
+# El proyecto no usa paquetes externos: todo se resuelve con macros propias
+# y los tests singulares que se escriben en tests/. Se deja el archivo para que
+# quede explicito que la ausencia es una decision, no un olvido.
+#
+# Si mas adelante se agrega dbt_utils, descomentar y usar `dbt deps`.
+packages: []

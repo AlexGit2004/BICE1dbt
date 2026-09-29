@@ -1,0 +1,479 @@
+version: 2
+
+sources:
+  - name: bronze
+    description: "Bronze layer: 32 tablas cargadas por Airbyte desde 7 fuentes"
+    schema: CBRONZE
+    tables:
+      - name: ms1_cliente
+      - name: ms1_prestamo
+      - name: ms1_solicitud_credito
+      - name: ms1_pago
+      - name: ms1_garantia
+      - name: ms1_producto_crediticio
+      - name: ms1_agencia
+      - name: ms1_caracteristica_cliente
+      - name: ms1_informacion_laboral_solicitud
+      - name: ms1_tipo_rechazo
+      - name: pg2_proceso_penal
+      - name: pg2_consolidado_antecedentes
+      - name: pg2_categoria_delito
+      - name: pg2_tipo_delito
+      - name: pg2_estado_proceso_penal
+      - name: server3_deuda_cr
+      - name: server3_deudor_central_riesgos
+      - name: server3_score_riesgo_cr
+      - name: server3_tipo_entidad_financiera
+      - name: maria4_empresa_registro_mercantil
+      - name: maria4_accionista_representante_rm
+      - name: maria4_situacion_tributaria_rm
+      - name: maria4_tipo_empresa_rm
+      - name: ms5_bien_inmueble
+      - name: ms5_derecho_real_inscripcion
+      - name: ms5_tipo_derecho_real
+      - name: ms5_gravamen_garantia_prestamo
+      - name: csv6_historial_financiero_externo
+      - name: json7_usuarios_redes
+      - name: json7_publicaciones
+      - name: json7_reacciones
+      - name: json7_comentarios
+
+models:
+  # ===========================================================================
+  # STAGING
+  # ===========================================================================
+  - name: stg_f1__cliente
+    description: "Staging de clientes (F1). Solo tipado y limpieza."
+    columns:
+      - name: cliente_id
+        tests:
+          - not_null
+          - unique
+      - name: numero_identificacion
+        tests:
+          - not_null
+
+  - name: stg_f1__prestamo
+    description: "Staging de prestamos (F1)."
+    columns:
+      - name: prestamo_id
+        tests:
+          - not_null
+          - unique
+      - name: cliente_id
+        tests:
+          - not_null
+      - name: monto_aprobado_bs
+        tests:
+          - not_null
+
+  - name: stg_f1__pago
+    description: "Staging de pagos (F1)."
+    columns:
+      - name: pago_id
+        tests:
+          - not_null
+          - unique
+      - name: prestamo_id
+        tests:
+          - not_null
+
+  - name: stg_f1__solicitud_credito
+    description: "Staging de solicitudes (F1)."
+    columns:
+      - name: solicitud_id
+        tests:
+          - not_null
+          - unique
+
+  - name: stg_f1__garantia
+    description: "Staging de garantias (F1)."
+    columns:
+      - name: garantia_id
+        tests:
+          - not_null
+          - unique
+
+  - name: stg_f1__producto_crediticio
+    description: "Staging de productos (F1)."
+    columns:
+      - name: producto_id
+        tests:
+          - not_null
+          - unique
+
+  - name: stg_f1__agencia
+    description: "Staging de agencias (F1)."
+    columns:
+      - name: agencia_id
+        tests:
+          - not_null
+          - unique
+
+  - name: stg_f2__proceso_penal
+    description: "Staging de procesos penales (F2)."
+    columns:
+      - name: proceso_id
+        tests:
+          - not_null
+          - unique
+
+  - name: stg_f3__deuda_cr
+    description: "Staging de deuda externa (F3)."
+    columns:
+      - name: deuda_id
+        tests:
+          - not_null
+          - unique
+
+  - name: stg_f3__deudor_central_riesgos
+    description: "Staging de deudores central de riesgos (F3)."
+    columns:
+      - name: deudor_id
+        tests:
+          - not_null
+          - unique
+
+  - name: stg_f3__score_riesgo_cr
+    description: "Staging de score de riesgo (F3)."
+    columns:
+      - name: score_id
+        tests:
+          - not_null
+          - unique
+
+  - name: stg_f4__empresa_registro_mercantil
+    description: "Staging de empresas (F4)."
+    columns:
+      - name: empresa_id
+        tests:
+          - not_null
+          - unique
+
+  - name: stg_f5__derecho_real_inscripcion
+    description: "Staging de inscripciones de derechos reales (F5)."
+    columns:
+      - name: inscripcion_id
+        tests:
+          - not_null
+          - unique
+
+  - name: stg_f5__bien_inmueble
+    description: "Staging de inmuebles (F5)."
+    columns:
+      - name: inmueble_id
+        tests:
+          - not_null
+          - unique
+
+  - name: stg_f5__gravamen_garantia_prestamo
+    description: "Staging de gravamenes (F5)."
+    columns:
+      - name: gravamen_id
+        tests:
+          - not_null
+          - unique
+
+  - name: stg_f7__publicaciones
+    description: "Staging de publicaciones en redes (F7)."
+    columns:
+      - name: _id
+        tests:
+          - not_null
+          - unique
+
+  - name: stg_f7__reacciones
+    description: "Staging de reacciones en redes (F7)."
+    columns:
+      - name: _id
+        tests:
+          - not_null
+          - unique
+
+  - name: stg_f7__comentarios
+    description: "Staging de comentarios en redes (F7)."
+    columns:
+      - name: _id
+        tests:
+          - not_null
+          - unique
+
+  - name: stg_f7__usuarios_redes
+    description: "Staging de usuarios de redes (F7)."
+    columns:
+      - name: _id
+        tests:
+          - not_null
+          - unique
+
+  # ===========================================================================
+  # INTERMEDIATES
+  # ===========================================================================
+  - name: int_identidad_resuelta
+    description: "Identidad resuelta por cliente (F1 maestro)."
+    columns:
+      - name: cliente_id
+        tests:
+          - not_null
+          - unique
+      - name: ci_canonico
+        tests:
+          - not_null
+
+  - name: int_prestamos
+    description: "Prestamos con producto, agencia, solicitud y caracteristicas."
+    columns:
+      - name: prestamo_id
+        tests:
+          - not_null
+          - unique
+      - name: cliente_id
+        tests:
+          - not_null
+
+  - name: int_pagos
+    description: "Pagos con contexto del prestamo y mora."
+    columns:
+      - name: pago_id
+        tests:
+          - not_null
+          - unique
+      - name: prestamo_id
+        tests:
+          - not_null
+
+  - name: int_riesgo_cliente
+    description: "Riesgo consolidado por cliente (F2+F3+F4)."
+    columns:
+      - name: cliente_id
+        tests:
+          - not_null
+          - unique
+
+  - name: int_deuda
+    description: "Deuda externa con deudor identificado."
+    columns:
+      - name: deuda_id
+        tests:
+          - not_null
+          - unique
+
+  - name: int_garantias
+    description: "Garantias con LTV y cobertura."
+    columns:
+      - name: garantia_id
+        tests:
+          - not_null
+          - unique
+
+  - name: int_derechos_reales
+    description: "Derechos reales inscritos con inmueble y titular."
+    columns:
+      - name: inscripcion_id
+        tests:
+          - not_null
+          - unique
+
+  - name: int_gravamen
+    description: "Vinculo registral garantia-prestamo."
+    columns:
+      - name: gravamen_id
+        tests:
+          - not_null
+          - unique
+
+  - name: int_social
+    description: "Interacciones en redes (reacciones + comentarios)."
+    columns:
+      - name: id_interaccion
+        tests:
+          - not_null
+
+  - name: int_participantes_empresa
+    description: "Participantes de empresas (F4)."
+    columns:
+      - name: participante_id
+        tests:
+          - not_null
+          - unique
+
+  # ===========================================================================
+  # GOLD: DIMENSIONES
+  # ===========================================================================
+  - name: dim_fecha
+    description: "Dimension de tiempo generada (2020-2029)."
+    columns:
+      - name: fecha
+        tests:
+          - not_null
+          - unique
+
+  - name: dim_cliente
+    description: "Maestro de clientes con riesgo consolidado."
+    columns:
+      - name: cliente_id
+        tests:
+          - not_null
+          - unique
+
+  - name: dim_producto
+    description: "Catalogo de productos crediticios."
+    columns:
+      - name: producto_id
+        tests:
+          - not_null
+          - unique
+
+  - name: dim_agencia
+    description: "Catalogo de agencias."
+    columns:
+      - name: agencia_id
+        tests:
+          - not_null
+          - unique
+
+  - name: dim_departamento
+    description: "Departamentos con agencia."
+    columns:
+      - name: departamento
+        tests:
+          - not_null
+          - unique
+
+  - name: dim_estado_prestamo
+    description: "Estados de prestamo."
+    columns:
+      - name: estado_prestamo
+        tests:
+          - not_null
+          - unique
+
+  - name: dim_tipo_rechazo
+    description: "Motivos de rechazo de solicitud."
+    columns:
+      - name: tipo_rechazo_id
+        tests:
+          - not_null
+          - unique
+
+  - name: dim_entidad
+    description: "Entidades financieras acreedoras."
+    columns:
+      - name: tipo_entidad_id
+        tests:
+          - not_null
+          - unique
+
+  - name: dim_riesgo_categoria
+    description: "Categorias de riesgo estandarizadas."
+    columns:
+      - name: categoria_riesgo
+        tests:
+          - not_null
+          - unique
+
+  - name: dim_delito_categoria
+    description: "Categorias de delito penal."
+    columns:
+      - name: categoria_delito_id
+        tests:
+          - not_null
+          - unique
+
+  - name: dim_xwalk_identidad
+    description: "Crosswalk de identidad canonica."
+    columns:
+      - name: cliente_id
+        tests:
+          - not_null
+
+  - name: dim_inmueble
+    description: "Inmuebles con atributos fisicos y registrales."
+    columns:
+      - name: inmueble_id
+        tests:
+          - not_null
+          - unique
+
+  - name: dim_tipo_garantia
+    description: "Tipos de garantia."
+    columns:
+      - name: tipo_garantia
+        tests:
+          - not_null
+          - unique
+
+  - name: dim_estado_garantia
+    description: "Estados de garantia."
+    columns:
+      - name: estado_garantia
+        tests:
+          - not_null
+          - unique
+
+  - name: dim_tipo_derecho_real
+    description: "Tipos de derecho real."
+    columns:
+      - name: tipo_derecho_real_id
+        tests:
+          - not_null
+          - unique
+
+  # ===========================================================================
+  # GOLD: HECHOS
+  # ===========================================================================
+  - name: fact_solicitudes
+    description: "Hecho de solicitudes de credito."
+    columns:
+      - name: solicitud_id
+        tests:
+          - not_null
+          - unique
+
+  - name: fact_prestamos
+    description: "Hecho de prestamos."
+    columns:
+      - name: prestamo_id
+        tests:
+          - not_null
+          - unique
+
+  - name: fact_pagos
+    description: "Hecho de pagos."
+    columns:
+      - name: pago_id
+        tests:
+          - not_null
+          - unique
+
+  - name: fact_riesgo_cliente
+    description: "Hecho de riesgo consolidado."
+    columns:
+      - name: cliente_id
+        tests:
+          - not_null
+          - unique
+
+  - name: fact_deuda_externa
+    description: "Hecho de deuda externa."
+    columns:
+      - name: deuda_id
+        tests:
+          - not_null
+          - unique
+
+  - name: fact_garantias
+    description: "Hecho de garantias."
+    columns:
+      - name: garantia_id
+        tests:
+          - not_null
+          - unique
+
+  - name: fact_derechos_reales
+    description: "Hecho de derechos reales."
+    columns:
+      - name: inscripcion_id
+        tests:
+          - not_null
+          - unique

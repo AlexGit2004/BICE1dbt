@@ -1,0 +1,182 @@
+# =============================================================================
+# sources.yml - Las 32 tablas de CBRONZE
+# =============================================================================
+# Declarado por tabla real, no por sufijo. dbt Fusion 2.0.6 ya NO soporta
+# loaded_at_field en sources: se elimino por completo. Si mas adelante se
+# necesita freshness, se usa config.freshness con warn_after y error_after.
+#
+# Los nombres de archivo vienen de los prefijos definitivos de Bronze:
+#   ms1_ (MySQL)  pg2_ (PostgreSQL)  server3_  maria4_  ms5_  csv6_  json7_
+# En Snowflake las tablas quedaron en MAYUSCULAS por el COPY. dbt resuelve
+# `source('bronze','ms1_cliente')` a CBRONZE.MS1_CLIENTE porque el proyecto
+# declara quoting.identifier: false.
+# =============================================================================
+version: 2
+
+sources:
+  - name: bronze
+    description: >-
+      Capa Bronze. 32 tablas, 4.537.707 filas, 469.73 MB, cargadas por
+      COPY INTO desde stage. Es la foto fiel de las 7 fuentes de origen,
+      sin transformar.
+    schema: CBRONZE
+    database: AIRBYTE_DATABASE
+    loader: SNOWFLAKE_CSV
+
+    tables:
+
+      # --- F1: MySQL, nucleo operacional (10 tablas) ------------------------
+      - name: ms1_cliente
+        description: "Maestro de clientes, 56.400 filas. Fuente Maestra de identidad (CI)."
+        columns:
+          - name: numero_identificacion
+            description: "CI de 8 digitos, fuente de verdad de la identidad."
+            tests: [not_null]
+
+      - name: ms1_caracteristica_cliente
+        description: "Atributos demograficos por cliente, 56.400 filas."
+        columns:
+          - name: cliente_id
+            tests: [not_null]
+
+      - name: ms1_producto_crediticio
+        description: "Catalogo de productos, 40 filas."
+        columns:
+          - name: producto_id
+            tests: [not_null]
+
+      - name: ms1_agencia
+        description: "Catalogo de agencias, 30 filas."
+        columns:
+          - name: agencia_id
+            tests: [not_null]
+
+      - name: ms1_tipo_rechazo
+        description: "Catalogo de motivos de rechazo, 15 filas."
+        columns:
+          - name: tipo_rechazo_id
+            tests: [not_null]
+
+      - name: ms1_solicitud_credito
+        description: "Solicitudes de credito, 197.400 filas."
+        columns:
+          - name: solicitud_id
+            tests: [not_null]
+
+      - name: ms1_prestamo
+        description: "Prestamos otorgados, 141.000 filas. Grano: un prestamo."
+        columns:
+          - name: prestamo_id
+            tests: [not_null]
+
+      - name: ms1_pago
+        description: "Pagos aplicados, 1.180.000 filas. Grano: un pago."
+        columns:
+          - name: pago_id
+            tests: [not_null]
+
+      - name: ms1_garantia
+        description: "Garantias declaradas, 112.800 filas."
+        columns:
+          - name: garantia_id
+            tests: [not_null]
+
+      - name: ms1_informacion_laboral_solicitud
+        description: "Ingreso y empleo por solicitud, 197.400 filas. Base del capacity check."
+        columns:
+          - name: solicitud_id
+            tests: [not_null]
+
+      # --- F2: PostgreSQL, antecedentes penales (5 tablas) ------------------
+      - name: pg2_categoria_delito
+        description: "Catalogo de categorias de delito, 7 filas."
+
+      - name: pg2_tipo_delito
+        description: "Catalogo de delitos, 25 filas."
+
+      - name: pg2_estado_proceso_penal
+        description: "Catalogo de estados de proceso, 5 filas."
+
+      - name: pg2_proceso_penal
+        description: "Procesos penales, 21.200 filas. El CI llega con separadores."
+        columns:
+          - name: numero_identificacion
+            tests: [not_null]
+
+      - name: pg2_consolidado_antecedentes
+        description: "Consolidado de antecedentes por CI, 46.248 filas."
+
+      # --- F3: Server, central de riesgos (4 tablas) ------------------------
+      - name: server3_tipo_entidad_financiera
+        description: "Catalogo de tipo de entidad, 6 filas."
+
+      - name: server3_deudor_central_riesgos
+        description: "Deudores de la central, 40.000 filas. El CI llega punteado."
+        columns:
+          - name: numero_identificacion
+            tests: [not_null]
+
+      - name: server3_deuda_cr
+        description: "Deuda por deudor y entidad, 46.000 filas."
+        columns:
+          - name: deuda_id
+            tests: [not_null]
+
+      - name: server3_score_riesgo_cr
+        description: "Score de morosidad, 40.000 filas."
+
+      # --- F4: MariaDB, registro mercantil (4 tablas) ----------------------
+      - name: maria4_tipo_empresa_rm
+        description: "Catalogo de tipo de empresa, 3 filas."
+
+      - name: maria4_empresa_registro_mercantil
+        description: "Empresas inscritas, 10.150 filas. El NIT es la identidad."
+        columns:
+          - name: empresa_id
+            tests: [not_null]
+
+      - name: maria4_accionista_representante_rm
+        description: "Accionistas y representantes, 25.400 filas."
+
+      - name: maria4_situacion_tributaria_rm
+        description: "Situacion tributaria por empresa y anio, 30.600 filas."
+
+      # --- F5: MySQL, derechos reales (4 tablas) ----------------------------
+      - name: ms5_tipo_derecho_real
+        description: "Catalogo de tipo de derecho real, 8 filas."
+
+      - name: ms5_bien_inmueble
+        description: "Bienes inmuebles, 70.000 filas. Avaluos con vigencia."
+
+      - name: ms5_derecho_real_inscripcion
+        description: "Inscripciones de derechos reales, 80.000 filas. Titular por CI."
+        columns:
+          - name: inscripcion_id
+            tests: [not_null]
+
+      - name: ms5_gravamen_garantia_prestamo
+        description: "Gravamenes que vinculan inscripcion y prestamo, 112.800 filas."
+
+      # --- F6: CSV, historial financiero externo (1 tabla) -------------------
+      - name: csv6_historial_financiero_externo
+        description: >-
+          Historial financiero externo, 33.840 filas = 60% exacto de los
+          56.400 clientes de F1. El CI viene con guion o espacio como
+          separador (ej. '96736376-1'), nunca con prefijo 'C'.
+        columns:
+          - name: numero_identificacion
+            description: "CI con guion o espacio. Se normaliza con el macro normalizar_identidad."
+            tests: [not_null]
+
+      # --- F7: JSON, redes sociales (4 tablas) -------------------------------
+      - name: json7_usuarios_redes
+        description: "Usuarios de redes, 77.948 filas. El id de red NO es el CI."
+
+      - name: json7_comentarios
+        description: "Comentarios, 690.901 filas."
+
+      - name: json7_publicaciones
+        description: "Publicaciones, 181.583 filas."
+
+      - name: json7_reacciones
+        description: "Reacciones, 1.089.498 filas."

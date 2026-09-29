@@ -1,0 +1,1873 @@
+{
+ "tablas": {
+  "CSV6_HISTORIAL_FINANCIERO_EXTERNO": [
+   {
+    "columna": "NUMERO_IDENTIFICACION",
+    "tipo": "TEXT",
+    "precision": null,
+    "escala": null,
+    "nullable": true
+   },
+   {
+    "columna": "TIPO_IDENTIFICACION",
+    "tipo": "NUMBER",
+    "precision": 38,
+    "escala": 0,
+    "nullable": true
+   },
+   {
+    "columna": "BANCO_ACREEDOR",
+    "tipo": "TEXT",
+    "precision": null,
+    "escala": null,
+    "nullable": true
+   },
+   {
+    "columna": "TIPO_PRODUCTO",
+    "tipo": "TEXT",
+    "precision": null,
+    "escala": null,
+    "nullable": true
+   },
+   {
+    "columna": "MONEDA",
+    "tipo": "TEXT",
+    "precision": null,
+    "escala": null,
+    "nullable": true
+   },
+   {
+    "columna": "MONTO_ORIGINADO",
+    "tipo": "NUMBER",
+    "precision": 18,
+    "escala": 2,
+    "nullable": true
+   },
+   {
+    "columna": "SALDO_ACTUAL",
+    "tipo": "NUMBER",
+    "precision": 18,
+    "escala": 2,
+    "nullable": true
+   },
+   {
+    "columna": "CUOTA_MENSUAL",
+    "tipo": "NUMBER",
+    "precision": 18,
+    "escala": 2,
+    "nullable": true
+   },
+   {
+    "columna": "PLAZO_MESES",
+    "tipo": "NUMBER",
+    "precision": 38,
+    "escala": 0,
+    "nullable": true
+   },
+   {
+    "columna": "FECHA_ORIGINACION",
+    "tipo": "DATE",
+    "precision": null,
+    "escala": null,
+    "nullable": true
+   },
+   {
+    "columna": "FECHA_VENCIMIENTO",
+    "tipo": "DATE",
+    "precision": null,
+    "escala": null,
+    "nullable": true
+   },
+   {
+    "columna": "FECHA_ULTIMO_PAGO",
+    "tipo": "DATE",
+    "precision": null,
+    "escala": null,
+    "nullable": true
+   },
+   {
+    "columna": "DIAS_MORA",
+    "tipo": "NUMBER",
+    "precision": 38,
+    "escala": 0,
+    "nullable": true
+   },
+   {
+    "columna": "CALIFICACION_ASFI",
+    "tipo": "TEXT",
+    "precision": null,
+    "escala": null,
+    "nullable": true
+   },
+   {
+    "columna": "ESTADO_CREDITO",
+    "tipo": "TEXT",
+    "precision": null,
+    "escala": null,
+    "nullable": true
+   },
+   {
+    "columna": "TIPO_GARANTIA",
+    "tipo": "TEXT",
+    "precision": null,
+    "escala": null,
+    "nullable": true
+   },
+   {
+    "columna": "FECHA_EXTRACCION",
+    "tipo": "DATE",
+    "precision": null,
+    "escala": null,
+    "nullable": true
+   }
+  ],
+  "JSON7_COMENTARIOS": [
+   {
+    "columna": "_ID",
+    "tipo": "TEXT",
+    "precision": null,
+    "escala": null,
+    "nullable": true
+   },
+   {
+    "columna": "POST_ID",
+    "tipo": "TEXT",
+    "precision": null,
+    "escala": null,
+    "nullable": true
+   },
+   {
+    "columna": "COMMENT_ID_RED",
+    "tipo": "TEXT",
+    "precision": null,
+    "escala": null,
+    "nullable": true
+   },
+   {
+    "columna": "PLATAFORMA",
+    "tipo": "TEXT",
+    "precision": null,
+    "escala": null,
+    "nullable": true
+   },
+   {
+    "columna": "USUARIO_ID_RED",
+    "tipo": "TEXT",
+    "precision": null,
+    "escala": null,
+    "nullable": true
+   },
+   {
+    "columna": "NOMBRE_USUARIO",
+    "tipo": "TEXT",
+    "precision": null,
+    "escala": null,
+    "nullable": true
+   },
+   {
+    "columna": "NOMBRE_PANTALLA",
+    "tipo": "TEXT",
+    "precision": null,
+    "escala": null,
+    "nullable": true
+   },
+   {
+    "columna": "TEXTO_COMENTARIO",
+    "tipo": "TEXT",
+    "precision": null,
+    "escala": null,
+    "nullable": true
+   },
+   {
+    "columna": "FECHA_COMENTARIO",
+    "tipo": "DATE",
+    "precision": null,
+    "escala": null,
+    "nullable": true
+   },
+   {
+    "columna": "PARENT_COMMENT_ID",
+    "tipo": "TEXT",
+    "precision": null,
+    "escala": null,
+    "nullable": true
+   },
+   {
+    "columna": "REACCIONES_COMENTARIO",
+    "tipo": "NUMBER",
+    "precision": 38,
+    "escala": 0,
+    "nullable": true
+   },
+   {
+    "columna": "SENTIMIENTO_SCORE",
+    "tipo": "NUMBER",
+    "precision": 6,
+    "escala": 4,
+    "nullable": true
+   },
+   {
+    "columna": "SENTIMIENTO_ETIQUETA",
+    "tipo": "TEXT",
+    "precision": null,
+    "escala": null,
+    "nullable": true
+   },
+   {
+    "columna": "FECHA_EXTRACCION",
+    "tipo": "DATE",
+    "precision": null,
+    "escala": null,
+    "nullable": true
+   }
+  ],
+  "JSON7_PUBLICACIONES": [
+   {
+    "columna": "_ID",
+    "tipo": "TEXT",
+    "precision": null,
+    "escala": null,
+    "nullable": true
+   },
+   {
+    "columna": "POST_ID_RED",
+    "tipo": "TEXT",
+    "precision": null,
+    "escala": null,
+    "nullable": true
+   },
+   {
+    "columna": "PLATAFORMA",
+    "tipo": "TEXT",
+    "precision": null,
+    "escala": null,
+    "nullable": true
+   },
+   {
+    "columna": "CUENTA_PROPIETARIA",
+    "tipo": "TEXT",
+    "precision": null,
+    "escala": null,
+    "nullable": true
+   },
+   {
+    "columna": "FECHA_PUBLICACION",
+    "tipo": "DATE",
+    "precision": null,
+    "escala": null,
+    "nullable": true
+   },
+   {
+    "columna": "DESCRIPCION",
+    "tipo": "TEXT",
+    "precision": null,
+    "escala": null,
+    "nullable": true
+   },
+   {
+    "columna": "URL_POST",
+    "tipo": "TEXT",
+    "precision": null,
+    "escala": null,
+    "nullable": true
+   },
+   {
+    "columna": "TOTAL_COMENTARIOS",
+    "tipo": "NUMBER",
+    "precision": 38,
+    "escala": 0,
+    "nullable": true
+   },
+   {
+    "columna": "TOTAL_REACCIONES",
+    "tipo": "NUMBER",
+    "precision": 38,
+    "escala": 0,
+    "nullable": true
+   },
+   {
+    "columna": "TOTAL_COMPARTIDOS",
+    "tipo": "NUMBER",
+    "precision": 38,
+    "escala": 0,
+    "nullable": true
+   },
+   {
+    "columna": "FECHA_EXTRACCION",
+    "tipo": "DATE",
+    "precision": null,
+    "escala": null,
+    "nullable": true
+   }
+  ],
+  "JSON7_REACCIONES": [
+   {
+    "columna": "_ID",
+    "tipo": "TEXT",
+    "precision": null,
+    "escala": null,
+    "nullable": true
+   },
+   {
+    "columna": "POST_ID",
+    "tipo": "TEXT",
+    "precision": null,
+    "escala": null,
+    "nullable": true
+   },
+   {
+    "columna": "PLATAFORMA",
+    "tipo": "TEXT",
+    "precision": null,
+    "escala": null,
+    "nullable": true
+   },
+   {
+    "columna": "TIPO_REACCION",
+    "tipo": "TEXT",
+    "precision": null,
+    "escala": null,
+    "nullable": true
+   },
+   {
+    "columna": "USUARIO_ID_RED",
+    "tipo": "TEXT",
+    "precision": null,
+    "escala": null,
+    "nullable": true
+   },
+   {
+    "columna": "NOMBRE_USUARIO",
+    "tipo": "TEXT",
+    "precision": null,
+    "escala": null,
+    "nullable": true
+   },
+   {
+    "columna": "FECHA_REACCION",
+    "tipo": "DATE",
+    "precision": null,
+    "escala": null,
+    "nullable": true
+   },
+   {
+    "columna": "FECHA_EXTRACCION",
+    "tipo": "DATE",
+    "precision": null,
+    "escala": null,
+    "nullable": true
+   }
+  ],
+  "JSON7_USUARIOS_REDES": [
+   {
+    "columna": "_ID",
+    "tipo": "TEXT",
+    "precision": null,
+    "escala": null,
+    "nullable": true
+   },
+   {
+    "columna": "PLATAFORMA",
+    "tipo": "TEXT",
+    "precision": null,
+    "escala": null,
+    "nullable": true
+   },
+   {
+    "columna": "USUARIO_ID_RED",
+    "tipo": "TEXT",
+    "precision": null,
+    "escala": null,
+    "nullable": true
+   },
+   {
+    "columna": "NOMBRE_USUARIO",
+    "tipo": "TEXT",
+    "precision": null,
+    "escala": null,
+    "nullable": true
+   },
+   {
+    "columna": "TOTAL_COMENTARIOS_REALIZADOS",
+    "tipo": "NUMBER",
+    "precision": 38,
+    "escala": 0,
+    "nullable": true
+   },
+   {
+    "columna": "TOTAL_REACCIONES_REALIZADAS",
+    "tipo": "NUMBER",
+    "precision": 38,
+    "escala": 0,
+    "nullable": true
+   },
+   {
+    "columna": "PRIMERA_INTERACCION",
+    "tipo": "DATE",
+    "precision": null,
+    "escala": null,
+    "nullable": true
+   },
+   {
+    "columna": "ULTIMA_INTERACCION",
+    "tipo": "DATE",
+    "precision": null,
+    "escala": null,
+    "nullable": true
+   }
+  ],
+  "MARIA4_ACCIONISTA_REPRESENTANTE_RM": [
+   {
+    "columna": "PARTICIPANTE_ID",
+    "tipo": "NUMBER",
+    "precision": 38,
+    "escala": 0,
+    "nullable": true
+   },
+   {
+    "columna": "EMPRESA_ID",
+    "tipo": "NUMBER",
+    "precision": 38,
+    "escala": 0,
+    "nullable": true
+   },
+   {
+    "columna": "NUMERO_IDENTIFICACION",
+    "tipo": "TEXT",
+    "precision": null,
+    "escala": null,
+    "nullable": true
+   },
+   {
+    "columna": "NOMBRE_COMPLETO",
+    "tipo": "TEXT",
+    "precision": null,
+    "escala": null,
+    "nullable": true
+   },
+   {
+    "columna": "TIPO_PARTICIPACION",
+    "tipo": "TEXT",
+    "precision": null,
+    "escala": null,
+    "nullable": true
+   },
+   {
+    "columna": "PORCENTAJE_PARTICIPACION",
+    "tipo": "NUMBER",
+    "precision": 18,
+    "escala": 2,
+    "nullable": true
+   },
+   {
+    "columna": "ES_CONTROLADOR",
+    "tipo": "BOOLEAN",
+    "precision": null,
+    "escala": null,
+    "nullable": true
+   }
+  ],
+  "MARIA4_EMPRESA_REGISTRO_MERCANTIL": [
+   {
+    "columna": "EMPRESA_ID",
+    "tipo": "NUMBER",
+    "precision": 38,
+    "escala": 0,
+    "nullable": true
+   },
+   {
+    "columna": "NIT_EMPRESA",
+    "tipo": "TEXT",
+    "precision": null,
+    "escala": null,
+    "nullable": true
+   },
+   {
+    "columna": "TIPO_EMPRESA_ID",
+    "tipo": "NUMBER",
+    "precision": 38,
+    "escala": 0,
+    "nullable": true
+   },
+   {
+    "columna": "RAZON_SOCIAL",
+    "tipo": "TEXT",
+    "precision": null,
+    "escala": null,
+    "nullable": true
+   },
+   {
+    "columna": "FECHA_CONSTITUCION",
+    "tipo": "DATE",
+    "precision": null,
+    "escala": null,
+    "nullable": true
+   },
+   {
+    "columna": "CAPITAL_PAGADO_BS",
+    "tipo": "NUMBER",
+    "precision": 18,
+    "escala": 2,
+    "nullable": true
+   },
+   {
+    "columna": "DEPARTAMENTO_INSCRIPCION",
+    "tipo": "TEXT",
+    "precision": null,
+    "escala": null,
+    "nullable": true
+   },
+   {
+    "columna": "ESTADO_EMPRESA",
+    "tipo": "TEXT",
+    "precision": null,
+    "escala": null,
+    "nullable": true
+   }
+  ],
+  "MARIA4_SITUACION_TRIBUTARIA_RM": [
+   {
+    "columna": "SITUACION_TRIBUTARIA_ID",
+    "tipo": "NUMBER",
+    "precision": 38,
+    "escala": 0,
+    "nullable": true
+   },
+   {
+    "columna": "EMPRESA_ID",
+    "tipo": "NUMBER",
+    "precision": 38,
+    "escala": 0,
+    "nullable": true
+   },
+   {
+    "columna": "ANIO_FISCAL",
+    "tipo": "NUMBER",
+    "precision": 38,
+    "escala": 0,
+    "nullable": true
+   },
+   {
+    "columna": "MONTO_IMPUESTOS_ADEUDADOS_BS",
+    "tipo": "NUMBER",
+    "precision": 18,
+    "escala": 2,
+    "nullable": true
+   },
+   {
+    "columna": "ESTADO_TRIBUTARIO",
+    "tipo": "TEXT",
+    "precision": null,
+    "escala": null,
+    "nullable": true
+   },
+   {
+    "columna": "FECHA_ACTUALIZACION",
+    "tipo": "DATE",
+    "precision": null,
+    "escala": null,
+    "nullable": true
+   }
+  ],
+  "MARIA4_TIPO_EMPRESA_RM": [
+   {
+    "columna": "TIPO_EMPRESA_ID",
+    "tipo": "NUMBER",
+    "precision": 38,
+    "escala": 0,
+    "nullable": true
+   },
+   {
+    "columna": "NOMBRE_TIPO",
+    "tipo": "TEXT",
+    "precision": null,
+    "escala": null,
+    "nullable": true
+   },
+   {
+    "columna": "DESCRIPCION",
+    "tipo": "TEXT",
+    "precision": null,
+    "escala": null,
+    "nullable": true
+   }
+  ],
+  "MS1_AGENCIA": [
+   {
+    "columna": "AGENCIA_ID",
+    "tipo": "NUMBER",
+    "precision": 38,
+    "escala": 0,
+    "nullable": true
+   },
+   {
+    "columna": "NOMBRE_AGENCIA",
+    "tipo": "TEXT",
+    "precision": null,
+    "escala": null,
+    "nullable": true
+   },
+   {
+    "columna": "CODIGO_AGENCIA",
+    "tipo": "TEXT",
+    "precision": null,
+    "escala": null,
+    "nullable": true
+   },
+   {
+    "columna": "DEPARTAMENTO",
+    "tipo": "TEXT",
+    "precision": null,
+    "escala": null,
+    "nullable": true
+   },
+   {
+    "columna": "TIPO_AGENCIA",
+    "tipo": "TEXT",
+    "precision": null,
+    "escala": null,
+    "nullable": true
+   },
+   {
+    "columna": "ESTADO_AGENCIA",
+    "tipo": "TEXT",
+    "precision": null,
+    "escala": null,
+    "nullable": true
+   }
+  ],
+  "MS1_CARACTERISTICA_CLIENTE": [
+   {
+    "columna": "CARAC_ID",
+    "tipo": "NUMBER",
+    "precision": 38,
+    "escala": 0,
+    "nullable": true
+   },
+   {
+    "columna": "CLIENTE_ID",
+    "tipo": "NUMBER",
+    "precision": 38,
+    "escala": 0,
+    "nullable": true
+   },
+   {
+    "columna": "FECHA_NACIMIENTO",
+    "tipo": "DATE",
+    "precision": null,
+    "escala": null,
+    "nullable": true
+   },
+   {
+    "columna": "SEXO",
+    "tipo": "TEXT",
+    "precision": null,
+    "escala": null,
+    "nullable": true
+   },
+   {
+    "columna": "ESTADO_CIVIL",
+    "tipo": "TEXT",
+    "precision": null,
+    "escala": null,
+    "nullable": true
+   },
+   {
+    "columna": "NACIONALIDAD",
+    "tipo": "TEXT",
+    "precision": null,
+    "escala": null,
+    "nullable": true
+   },
+   {
+    "columna": "PROFESION",
+    "tipo": "TEXT",
+    "precision": null,
+    "escala": null,
+    "nullable": true
+   }
+  ],
+  "MS1_CLIENTE": [
+   {
+    "columna": "CLIENTE_ID",
+    "tipo": "NUMBER",
+    "precision": 38,
+    "escala": 0,
+    "nullable": true
+   },
+   {
+    "columna": "NUMERO_IDENTIFICACION",
+    "tipo": "TEXT",
+    "precision": null,
+    "escala": null,
+    "nullable": true
+   },
+   {
+    "columna": "TIPO_ID",
+    "tipo": "NUMBER",
+    "precision": 38,
+    "escala": 0,
+    "nullable": true
+   },
+   {
+    "columna": "ES_PERSONA_JURIDICA",
+    "tipo": "BOOLEAN",
+    "precision": null,
+    "escala": null,
+    "nullable": true
+   },
+   {
+    "columna": "NIT_EMPRESA",
+    "tipo": "TEXT",
+    "precision": null,
+    "escala": null,
+    "nullable": true
+   },
+   {
+    "columna": "CI_REPRESENTANTE_LEGAL",
+    "tipo": "TEXT",
+    "precision": null,
+    "escala": null,
+    "nullable": true
+   },
+   {
+    "columna": "NOMBRE_COMPLETO",
+    "tipo": "TEXT",
+    "precision": null,
+    "escala": null,
+    "nullable": true
+   },
+   {
+    "columna": "NOMBRE_REPRESENTANTE_LEGAL",
+    "tipo": "TEXT",
+    "precision": null,
+    "escala": null,
+    "nullable": true
+   },
+   {
+    "columna": "ESTADO_CLIENTE",
+    "tipo": "TEXT",
+    "precision": null,
+    "escala": null,
+    "nullable": true
+   },
+   {
+    "columna": "FECHA_CREACION",
+    "tipo": "DATE",
+    "precision": null,
+    "escala": null,
+    "nullable": true
+   }
+  ],
+  "MS1_GARANTIA": [
+   {
+    "columna": "GARANTIA_ID",
+    "tipo": "NUMBER",
+    "precision": 38,
+    "escala": 0,
+    "nullable": true
+   },
+   {
+    "columna": "PRESTAMO_ID",
+    "tipo": "NUMBER",
+    "precision": 38,
+    "escala": 0,
+    "nullable": true
+   },
+   {
+    "columna": "TIPO_GARANTIA",
+    "tipo": "TEXT",
+    "precision": null,
+    "escala": null,
+    "nullable": true
+   },
+   {
+    "columna": "DESCRIPCION_BIEN",
+    "tipo": "TEXT",
+    "precision": null,
+    "escala": null,
+    "nullable": true
+   },
+   {
+    "columna": "VALOR_AVALUO_BS",
+    "tipo": "NUMBER",
+    "precision": 18,
+    "escala": 2,
+    "nullable": true
+   },
+   {
+    "columna": "FECHA_AVALUO",
+    "tipo": "DATE",
+    "precision": null,
+    "escala": null,
+    "nullable": true
+   },
+   {
+    "columna": "COBERTURA_PRESTAMO_PORCENTAJE",
+    "tipo": "NUMBER",
+    "precision": 18,
+    "escala": 2,
+    "nullable": true
+   },
+   {
+    "columna": "ESTADO_GARANTIA",
+    "tipo": "TEXT",
+    "precision": null,
+    "escala": null,
+    "nullable": true
+   }
+  ],
+  "MS1_INFORMACION_LABORAL_SOLICITUD": [
+   {
+    "columna": "INFO_LABORAL_ID",
+    "tipo": "NUMBER",
+    "precision": 38,
+    "escala": 0,
+    "nullable": true
+   },
+   {
+    "columna": "SOLICITUD_ID",
+    "tipo": "NUMBER",
+    "precision": 38,
+    "escala": 0,
+    "nullable": true
+   },
+   {
+    "columna": "CLIENTE_ID",
+    "tipo": "NUMBER",
+    "precision": 38,
+    "escala": 0,
+    "nullable": true
+   },
+   {
+    "columna": "FECHA_ACTUALIZACION",
+    "tipo": "DATE",
+    "precision": null,
+    "escala": null,
+    "nullable": true
+   },
+   {
+    "columna": "TIPO_EMPLEO",
+    "tipo": "TEXT",
+    "precision": null,
+    "escala": null,
+    "nullable": true
+   },
+   {
+    "columna": "EMPRESA",
+    "tipo": "TEXT",
+    "precision": null,
+    "escala": null,
+    "nullable": true
+   },
+   {
+    "columna": "SECTOR_ECONOMICO",
+    "tipo": "TEXT",
+    "precision": null,
+    "escala": null,
+    "nullable": true
+   },
+   {
+    "columna": "CARGO",
+    "tipo": "TEXT",
+    "precision": null,
+    "escala": null,
+    "nullable": true
+   },
+   {
+    "columna": "ANTIGUEDAD_MESES",
+    "tipo": "NUMBER",
+    "precision": 38,
+    "escala": 0,
+    "nullable": true
+   },
+   {
+    "columna": "INGRESO_MENSUAL_BS",
+    "tipo": "NUMBER",
+    "precision": 18,
+    "escala": 2,
+    "nullable": true
+   },
+   {
+    "columna": "TIPO_CONTRATO",
+    "tipo": "TEXT",
+    "precision": null,
+    "escala": null,
+    "nullable": true
+   },
+   {
+    "columna": "CIUDAD",
+    "tipo": "TEXT",
+    "precision": null,
+    "escala": null,
+    "nullable": true
+   },
+   {
+    "columna": "ESTADO_EMPLEO",
+    "tipo": "TEXT",
+    "precision": null,
+    "escala": null,
+    "nullable": true
+   }
+  ],
+  "MS1_PAGO": [
+   {
+    "columna": "PAGO_ID",
+    "tipo": "NUMBER",
+    "precision": 38,
+    "escala": 0,
+    "nullable": true
+   },
+   {
+    "columna": "PRESTAMO_ID",
+    "tipo": "NUMBER",
+    "precision": 38,
+    "escala": 0,
+    "nullable": true
+   },
+   {
+    "columna": "CLIENTE_ID",
+    "tipo": "NUMBER",
+    "precision": 38,
+    "escala": 0,
+    "nullable": true
+   },
+   {
+    "columna": "FECHA_PAGO",
+    "tipo": "DATE",
+    "precision": null,
+    "escala": null,
+    "nullable": true
+   },
+   {
+    "columna": "MONTO_PAGADO_BS",
+    "tipo": "NUMBER",
+    "precision": 18,
+    "escala": 2,
+    "nullable": true
+   },
+   {
+    "columna": "NUMERO_CUOTA",
+    "tipo": "NUMBER",
+    "precision": 38,
+    "escala": 0,
+    "nullable": true
+   },
+   {
+    "columna": "DIAS_ATRASO_AL_PAGO",
+    "tipo": "NUMBER",
+    "precision": 38,
+    "escala": 0,
+    "nullable": true
+   },
+   {
+    "columna": "TIPO_PAGO",
+    "tipo": "TEXT",
+    "precision": null,
+    "escala": null,
+    "nullable": true
+   },
+   {
+    "columna": "ESTADO_PAGO",
+    "tipo": "TEXT",
+    "precision": null,
+    "escala": null,
+    "nullable": true
+   }
+  ],
+  "MS1_PRESTAMO": [
+   {
+    "columna": "PRESTAMO_ID",
+    "tipo": "NUMBER",
+    "precision": 38,
+    "escala": 0,
+    "nullable": true
+   },
+   {
+    "columna": "SOLICITUD_ID",
+    "tipo": "NUMBER",
+    "precision": 38,
+    "escala": 0,
+    "nullable": true
+   },
+   {
+    "columna": "CLIENTE_ID",
+    "tipo": "NUMBER",
+    "precision": 38,
+    "escala": 0,
+    "nullable": true
+   },
+   {
+    "columna": "PRODUCTO_ID",
+    "tipo": "NUMBER",
+    "precision": 38,
+    "escala": 0,
+    "nullable": true
+   },
+   {
+    "columna": "AGENCIA_ID",
+    "tipo": "NUMBER",
+    "precision": 38,
+    "escala": 0,
+    "nullable": true
+   },
+   {
+    "columna": "FECHA_ORIGINACION",
+    "tipo": "DATE",
+    "precision": null,
+    "escala": null,
+    "nullable": true
+   },
+   {
+    "columna": "FECHA_VENCIMIENTO",
+    "tipo": "DATE",
+    "precision": null,
+    "escala": null,
+    "nullable": true
+   },
+   {
+    "columna": "MONTO_APROBADO_BS",
+    "tipo": "NUMBER",
+    "precision": 18,
+    "escala": 2,
+    "nullable": true
+   },
+   {
+    "columna": "TASA_INTERES_APLICADA",
+    "tipo": "NUMBER",
+    "precision": 18,
+    "escala": 2,
+    "nullable": true
+   },
+   {
+    "columna": "PLAZO_APROBADO_MESES",
+    "tipo": "NUMBER",
+    "precision": 38,
+    "escala": 0,
+    "nullable": true
+   },
+   {
+    "columna": "CUOTA_MENSUAL_BS",
+    "tipo": "NUMBER",
+    "precision": 18,
+    "escala": 2,
+    "nullable": true
+   },
+   {
+    "columna": "SALDO_ACTUAL_BS",
+    "tipo": "NUMBER",
+    "precision": 18,
+    "escala": 2,
+    "nullable": true
+   },
+   {
+    "columna": "DIAS_ATRASO",
+    "tipo": "NUMBER",
+    "precision": 38,
+    "escala": 0,
+    "nullable": true
+   },
+   {
+    "columna": "DIAS_MORA_AL_ULTIMO_PAGO",
+    "tipo": "NUMBER",
+    "precision": 38,
+    "escala": 0,
+    "nullable": true
+   },
+   {
+    "columna": "ESTADO_PRESTAMO",
+    "tipo": "TEXT",
+    "precision": null,
+    "escala": null,
+    "nullable": true
+   }
+  ],
+  "MS1_PRODUCTO_CREDITICIO": [
+   {
+    "columna": "PRODUCTO_ID",
+    "tipo": "NUMBER",
+    "precision": 38,
+    "escala": 0,
+    "nullable": true
+   },
+   {
+    "columna": "NOMBRE_PRODUCTO",
+    "tipo": "TEXT",
+    "precision": null,
+    "escala": null,
+    "nullable": true
+   },
+   {
+    "columna": "TIPO_PRODUCTO",
+    "tipo": "TEXT",
+    "precision": null,
+    "escala": null,
+    "nullable": true
+   },
+   {
+    "columna": "TASA_INTERES_BASE",
+    "tipo": "NUMBER",
+    "precision": 18,
+    "escala": 2,
+    "nullable": true
+   },
+   {
+    "columna": "PLAZO_MINIMO_MESES",
+    "tipo": "NUMBER",
+    "precision": 38,
+    "escala": 0,
+    "nullable": true
+   },
+   {
+    "columna": "PLAZO_MAXIMO_MESES",
+    "tipo": "NUMBER",
+    "precision": 38,
+    "escala": 0,
+    "nullable": true
+   },
+   {
+    "columna": "MONTO_MINIMO_BS",
+    "tipo": "NUMBER",
+    "precision": 18,
+    "escala": 2,
+    "nullable": true
+   },
+   {
+    "columna": "MONTO_MAXIMO_BS",
+    "tipo": "NUMBER",
+    "precision": 18,
+    "escala": 2,
+    "nullable": true
+   },
+   {
+    "columna": "ESTADO_PRODUCTO",
+    "tipo": "TEXT",
+    "precision": null,
+    "escala": null,
+    "nullable": true
+   }
+  ],
+  "MS1_SOLICITUD_CREDITO": [
+   {
+    "columna": "SOLICITUD_ID",
+    "tipo": "NUMBER",
+    "precision": 38,
+    "escala": 0,
+    "nullable": true
+   },
+   {
+    "columna": "CLIENTE_ID",
+    "tipo": "NUMBER",
+    "precision": 38,
+    "escala": 0,
+    "nullable": true
+   },
+   {
+    "columna": "PRODUCTO_ID",
+    "tipo": "NUMBER",
+    "precision": 38,
+    "escala": 0,
+    "nullable": true
+   },
+   {
+    "columna": "FECHA_SOLICITUD",
+    "tipo": "DATE",
+    "precision": null,
+    "escala": null,
+    "nullable": true
+   },
+   {
+    "columna": "MONTO_SOLICITADO_BS",
+    "tipo": "NUMBER",
+    "precision": 18,
+    "escala": 2,
+    "nullable": true
+   },
+   {
+    "columna": "PLAZO_SOLICITADO_MESES",
+    "tipo": "NUMBER",
+    "precision": 38,
+    "escala": 0,
+    "nullable": true
+   },
+   {
+    "columna": "ESTADO_SOLICITUD",
+    "tipo": "TEXT",
+    "precision": null,
+    "escala": null,
+    "nullable": true
+   },
+   {
+    "columna": "TIPO_RECHAZO_ID",
+    "tipo": "NUMBER",
+    "precision": 38,
+    "escala": 0,
+    "nullable": true
+   }
+  ],
+  "MS1_TIPO_RECHAZO": [
+   {
+    "columna": "TIPO_RECHAZO_ID",
+    "tipo": "NUMBER",
+    "precision": 38,
+    "escala": 0,
+    "nullable": true
+   },
+   {
+    "columna": "NOMBRE_MOTIVO",
+    "tipo": "TEXT",
+    "precision": null,
+    "escala": null,
+    "nullable": true
+   },
+   {
+    "columna": "CATEGORIA",
+    "tipo": "TEXT",
+    "precision": null,
+    "escala": null,
+    "nullable": true
+   }
+  ],
+  "MS5_BIEN_INMUEBLE": [
+   {
+    "columna": "INMUEBLE_ID",
+    "tipo": "NUMBER",
+    "precision": 38,
+    "escala": 0,
+    "nullable": true
+   },
+   {
+    "columna": "MATRICULA_INMUEBLE",
+    "tipo": "TEXT",
+    "precision": null,
+    "escala": null,
+    "nullable": true
+   },
+   {
+    "columna": "TIPO_INMUEBLE",
+    "tipo": "TEXT",
+    "precision": null,
+    "escala": null,
+    "nullable": true
+   },
+   {
+    "columna": "DESCRIPCION",
+    "tipo": "TEXT",
+    "precision": null,
+    "escala": null,
+    "nullable": true
+   },
+   {
+    "columna": "DIRECCION",
+    "tipo": "TEXT",
+    "precision": null,
+    "escala": null,
+    "nullable": true
+   },
+   {
+    "columna": "ZONA",
+    "tipo": "TEXT",
+    "precision": null,
+    "escala": null,
+    "nullable": true
+   },
+   {
+    "columna": "DEPARTAMENTO",
+    "tipo": "TEXT",
+    "precision": null,
+    "escala": null,
+    "nullable": true
+   },
+   {
+    "columna": "SUPERFICIE_M2",
+    "tipo": "NUMBER",
+    "precision": 18,
+    "escala": 2,
+    "nullable": true
+   },
+   {
+    "columna": "VALOR_COMERCIAL_BS",
+    "tipo": "NUMBER",
+    "precision": 18,
+    "escala": 2,
+    "nullable": true
+   },
+   {
+    "columna": "VALOR_AVALUO_BS",
+    "tipo": "NUMBER",
+    "precision": 18,
+    "escala": 2,
+    "nullable": true
+   },
+   {
+    "columna": "FECHA_AVALUO",
+    "tipo": "DATE",
+    "precision": null,
+    "escala": null,
+    "nullable": true
+   },
+   {
+    "columna": "ESTADO_INMUEBLE",
+    "tipo": "TEXT",
+    "precision": null,
+    "escala": null,
+    "nullable": true
+   }
+  ],
+  "MS5_DERECHO_REAL_INSCRIPCION": [
+   {
+    "columna": "INSCRIPCION_ID",
+    "tipo": "NUMBER",
+    "precision": 38,
+    "escala": 0,
+    "nullable": true
+   },
+   {
+    "columna": "NUMERO_INSCRIPCION",
+    "tipo": "TEXT",
+    "precision": null,
+    "escala": null,
+    "nullable": true
+   },
+   {
+    "columna": "INMUEBLE_ID",
+    "tipo": "NUMBER",
+    "precision": 38,
+    "escala": 0,
+    "nullable": true
+   },
+   {
+    "columna": "TIPO_DERECHO_REAL_ID",
+    "tipo": "NUMBER",
+    "precision": 38,
+    "escala": 0,
+    "nullable": true
+   },
+   {
+    "columna": "NUMERO_IDENTIFICACION_TITULAR",
+    "tipo": "TEXT",
+    "precision": null,
+    "escala": null,
+    "nullable": true
+   },
+   {
+    "columna": "FECHA_INSCRIPCION",
+    "tipo": "DATE",
+    "precision": null,
+    "escala": null,
+    "nullable": true
+   },
+   {
+    "columna": "FECHA_VENCIMIENTO",
+    "tipo": "DATE",
+    "precision": null,
+    "escala": null,
+    "nullable": true
+   },
+   {
+    "columna": "MONTO_BASE_BS",
+    "tipo": "NUMBER",
+    "precision": 18,
+    "escala": 2,
+    "nullable": true
+   },
+   {
+    "columna": "NOTARIO",
+    "tipo": "TEXT",
+    "precision": null,
+    "escala": null,
+    "nullable": true
+   },
+   {
+    "columna": "ESTADO_INSCRIPCION",
+    "tipo": "TEXT",
+    "precision": null,
+    "escala": null,
+    "nullable": true
+   }
+  ],
+  "MS5_GRAVAMEN_GARANTIA_PRESTAMO": [
+   {
+    "columna": "GRAVAMEN_ID",
+    "tipo": "NUMBER",
+    "precision": 38,
+    "escala": 0,
+    "nullable": true
+   },
+   {
+    "columna": "INSCRIPCION_ID",
+    "tipo": "NUMBER",
+    "precision": 38,
+    "escala": 0,
+    "nullable": true
+   },
+   {
+    "columna": "PRESTAMO_ID",
+    "tipo": "NUMBER",
+    "precision": 38,
+    "escala": 0,
+    "nullable": true
+   },
+   {
+    "columna": "FECHA_INSCRIPCION_GRAVAMEN",
+    "tipo": "DATE",
+    "precision": null,
+    "escala": null,
+    "nullable": true
+   },
+   {
+    "columna": "MONTO_GARANTIZADO_BS",
+    "tipo": "NUMBER",
+    "precision": 18,
+    "escala": 2,
+    "nullable": true
+   },
+   {
+    "columna": "FECHA_LIBERACION",
+    "tipo": "DATE",
+    "precision": null,
+    "escala": null,
+    "nullable": true
+   },
+   {
+    "columna": "ESTADO_GRAVAMEN",
+    "tipo": "TEXT",
+    "precision": null,
+    "escala": null,
+    "nullable": true
+   }
+  ],
+  "MS5_TIPO_DERECHO_REAL": [
+   {
+    "columna": "TIPO_DERECHO_REAL_ID",
+    "tipo": "NUMBER",
+    "precision": 38,
+    "escala": 0,
+    "nullable": true
+   },
+   {
+    "columna": "CODIGO",
+    "tipo": "TEXT",
+    "precision": null,
+    "escala": null,
+    "nullable": true
+   },
+   {
+    "columna": "NOMBRE_TIPO",
+    "tipo": "TEXT",
+    "precision": null,
+    "escala": null,
+    "nullable": true
+   },
+   {
+    "columna": "ES_GARANTIA",
+    "tipo": "BOOLEAN",
+    "precision": null,
+    "escala": null,
+    "nullable": true
+   },
+   {
+    "columna": "ES_TRANSMISION",
+    "tipo": "BOOLEAN",
+    "precision": null,
+    "escala": null,
+    "nullable": true
+   },
+   {
+    "columna": "REQUIERE_VALUACION",
+    "tipo": "BOOLEAN",
+    "precision": null,
+    "escala": null,
+    "nullable": true
+   }
+  ],
+  "PG2_CATEGORIA_DELITO": [
+   {
+    "columna": "CATEGORIA_DELITO_ID",
+    "tipo": "NUMBER",
+    "precision": 38,
+    "escala": 0,
+    "nullable": true
+   },
+   {
+    "columna": "NOMBRE_CATEGORIA",
+    "tipo": "TEXT",
+    "precision": null,
+    "escala": null,
+    "nullable": true
+   },
+   {
+    "columna": "DESCRIPCION",
+    "tipo": "TEXT",
+    "precision": null,
+    "escala": null,
+    "nullable": true
+   }
+  ],
+  "PG2_CONSOLIDADO_ANTECEDENTES": [
+   {
+    "columna": "ANTECEDENTE_ID",
+    "tipo": "NUMBER",
+    "precision": 38,
+    "escala": 0,
+    "nullable": true
+   },
+   {
+    "columna": "NUMERO_IDENTIFICACION",
+    "tipo": "TEXT",
+    "precision": null,
+    "escala": null,
+    "nullable": true
+   },
+   {
+    "columna": "TIENE_ANTECEDENTES_PENALES",
+    "tipo": "NUMBER",
+    "precision": 38,
+    "escala": 0,
+    "nullable": true
+   },
+   {
+    "columna": "CANTIDAD_PROCESOS_ACTIVOS",
+    "tipo": "NUMBER",
+    "precision": 38,
+    "escala": 0,
+    "nullable": true
+   },
+   {
+    "columna": "CANTIDAD_SENTENCIAS_CONDENATORIAS",
+    "tipo": "NUMBER",
+    "precision": 38,
+    "escala": 0,
+    "nullable": true
+   },
+   {
+    "columna": "FECHA_ULTIMA_ACTUALIZACION",
+    "tipo": "DATE",
+    "precision": null,
+    "escala": null,
+    "nullable": true
+   }
+  ],
+  "PG2_ESTADO_PROCESO_PENAL": [
+   {
+    "columna": "ESTADO_PROCESO_ID",
+    "tipo": "NUMBER",
+    "precision": 38,
+    "escala": 0,
+    "nullable": true
+   },
+   {
+    "columna": "NOMBRE_ESTADO",
+    "tipo": "TEXT",
+    "precision": null,
+    "escala": null,
+    "nullable": true
+   },
+   {
+    "columna": "ES_TERMINAL",
+    "tipo": "BOOLEAN",
+    "precision": null,
+    "escala": null,
+    "nullable": true
+   }
+  ],
+  "PG2_PROCESO_PENAL": [
+   {
+    "columna": "PROCESO_ID",
+    "tipo": "NUMBER",
+    "precision": 38,
+    "escala": 0,
+    "nullable": true
+   },
+   {
+    "columna": "NUMERO_IDENTIFICACION",
+    "tipo": "TEXT",
+    "precision": null,
+    "escala": null,
+    "nullable": true
+   },
+   {
+    "columna": "NUMERO_PROCESO",
+    "tipo": "TEXT",
+    "precision": null,
+    "escala": null,
+    "nullable": true
+   },
+   {
+    "columna": "TIPO_DELITO_ID",
+    "tipo": "NUMBER",
+    "precision": 38,
+    "escala": 0,
+    "nullable": true
+   },
+   {
+    "columna": "ESTADO_PROCESO_ID",
+    "tipo": "NUMBER",
+    "precision": 38,
+    "escala": 0,
+    "nullable": true
+   },
+   {
+    "columna": "JUZGADO_ORIGEN",
+    "tipo": "TEXT",
+    "precision": null,
+    "escala": null,
+    "nullable": true
+   },
+   {
+    "columna": "FECHA_INICIO_PROCESO",
+    "tipo": "DATE",
+    "precision": null,
+    "escala": null,
+    "nullable": true
+   },
+   {
+    "columna": "FECHA_ULTIMA_ACTUACION",
+    "tipo": "DATE",
+    "precision": null,
+    "escala": null,
+    "nullable": true
+   },
+   {
+    "columna": "FECHA_SENTENCIA",
+    "tipo": "DATE",
+    "precision": null,
+    "escala": null,
+    "nullable": true
+   },
+   {
+    "columna": "DESCRIPCION_BREVE",
+    "tipo": "TEXT",
+    "precision": null,
+    "escala": null,
+    "nullable": true
+   }
+  ],
+  "PG2_TIPO_DELITO": [
+   {
+    "columna": "TIPO_DELITO_ID",
+    "tipo": "NUMBER",
+    "precision": 38,
+    "escala": 0,
+    "nullable": true
+   },
+   {
+    "columna": "CATEGORIA_DELITO_ID",
+    "tipo": "NUMBER",
+    "precision": 38,
+    "escala": 0,
+    "nullable": true
+   },
+   {
+    "columna": "NOMBRE_DELITO",
+    "tipo": "TEXT",
+    "precision": null,
+    "escala": null,
+    "nullable": true
+   },
+   {
+    "columna": "CODIGO_PENAL",
+    "tipo": "TEXT",
+    "precision": null,
+    "escala": null,
+    "nullable": true
+   }
+  ],
+  "SERVER3_DEUDA_CR": [
+   {
+    "columna": "DEUDA_ID",
+    "tipo": "NUMBER",
+    "precision": 38,
+    "escala": 0,
+    "nullable": true
+   },
+   {
+    "columna": "DEUDOR_ID",
+    "tipo": "NUMBER",
+    "precision": 38,
+    "escala": 0,
+    "nullable": true
+   },
+   {
+    "columna": "ENTIDAD_FINANCIERA_ID",
+    "tipo": "NUMBER",
+    "precision": 38,
+    "escala": 0,
+    "nullable": true
+   },
+   {
+    "columna": "TIPO_OBLIGACION",
+    "tipo": "TEXT",
+    "precision": null,
+    "escala": null,
+    "nullable": true
+   },
+   {
+    "columna": "MONTO_DEUDA_ACTUAL_BS",
+    "tipo": "NUMBER",
+    "precision": 18,
+    "escala": 2,
+    "nullable": true
+   },
+   {
+    "columna": "DIAS_ATRASO_ACTUAL",
+    "tipo": "NUMBER",
+    "precision": 38,
+    "escala": 0,
+    "nullable": true
+   },
+   {
+    "columna": "FECHA_ORIGINACION",
+    "tipo": "DATE",
+    "precision": null,
+    "escala": null,
+    "nullable": true
+   },
+   {
+    "columna": "FECHA_CONSULTA",
+    "tipo": "DATE",
+    "precision": null,
+    "escala": null,
+    "nullable": true
+   }
+  ],
+  "SERVER3_DEUDOR_CENTRAL_RIESGOS": [
+   {
+    "columna": "DEUDOR_ID",
+    "tipo": "NUMBER",
+    "precision": 38,
+    "escala": 0,
+    "nullable": true
+   },
+   {
+    "columna": "NUMERO_IDENTIFICACION",
+    "tipo": "TEXT",
+    "precision": null,
+    "escala": null,
+    "nullable": true
+   },
+   {
+    "columna": "TIPO_PERSONA",
+    "tipo": "NUMBER",
+    "precision": 38,
+    "escala": 0,
+    "nullable": true
+   },
+   {
+    "columna": "CANTIDAD_INSTITUCIONES_ACREEDOR",
+    "tipo": "NUMBER",
+    "precision": 38,
+    "escala": 0,
+    "nullable": true
+   },
+   {
+    "columna": "MONTO_TOTAL_DEUDA_BS",
+    "tipo": "NUMBER",
+    "precision": 18,
+    "escala": 2,
+    "nullable": true
+   },
+   {
+    "columna": "FECHA_ULTIMA_CONSULTA",
+    "tipo": "DATE",
+    "precision": null,
+    "escala": null,
+    "nullable": true
+   }
+  ],
+  "SERVER3_SCORE_RIESGO_CR": [
+   {
+    "columna": "SCORE_CR_ID",
+    "tipo": "NUMBER",
+    "precision": 38,
+    "escala": 0,
+    "nullable": true
+   },
+   {
+    "columna": "DEUDOR_ID",
+    "tipo": "NUMBER",
+    "precision": 38,
+    "escala": 0,
+    "nullable": true
+   },
+   {
+    "columna": "CATEGORIA_RIESGO",
+    "tipo": "TEXT",
+    "precision": null,
+    "escala": null,
+    "nullable": true
+   },
+   {
+    "columna": "SCORE_MOROSIDAD",
+    "tipo": "NUMBER",
+    "precision": 38,
+    "escala": 0,
+    "nullable": true
+   },
+   {
+    "columna": "FECHA_CALCULO",
+    "tipo": "DATE",
+    "precision": null,
+    "escala": null,
+    "nullable": true
+   }
+  ],
+  "SERVER3_TIPO_ENTIDAD_FINANCIERA": [
+   {
+    "columna": "TIPO_ENTIDAD_ID",
+    "tipo": "NUMBER",
+    "precision": 38,
+    "escala": 0,
+    "nullable": true
+   },
+   {
+    "columna": "NOMBRE_TIPO",
+    "tipo": "TEXT",
+    "precision": null,
+    "escala": null,
+    "nullable": true
+   },
+   {
+    "columna": "DESCRIPCION",
+    "tipo": "TEXT",
+    "precision": null,
+    "escala": null,
+    "nullable": true
+   }
+  ]
+ },
+ "conteos": {
+  "CSV6_HISTORIAL_FINANCIERO_EXTERNO": 33840,
+  "JSON7_COMENTARIOS": 690901,
+  "JSON7_PUBLICACIONES": 181583,
+  "JSON7_REACCIONES": 1089498,
+  "JSON7_USUARIOS_REDES": 77948,
+  "MARIA4_ACCIONISTA_REPRESENTANTE_RM": 25400,
+  "MARIA4_EMPRESA_REGISTRO_MERCANTIL": 10150,
+  "MARIA4_SITUACION_TRIBUTARIA_RM": 30600,
+  "MARIA4_TIPO_EMPRESA_RM": 3,
+  "MS1_AGENCIA": 30,
+  "MS1_CARACTERISTICA_CLIENTE": 56400,
+  "MS1_CLIENTE": 56400,
+  "MS1_GARANTIA": 112800,
+  "MS1_INFORMACION_LABORAL_SOLICITUD": 197400,
+  "MS1_PAGO": 1180000,
+  "MS1_PRESTAMO": 141000,
+  "MS1_PRODUCTO_CREDITICIO": 40,
+  "MS1_SOLICITUD_CREDITO": 197400,
+  "MS1_TIPO_RECHAZO": 15,
+  "MS5_BIEN_INMUEBLE": 70000,
+  "MS5_DERECHO_REAL_INSCRIPCION": 80000,
+  "MS5_GRAVAMEN_GARANTIA_PRESTAMO": 112800,
+  "MS5_TIPO_DERECHO_REAL": 8,
+  "PG2_CATEGORIA_DELITO": 7,
+  "PG2_CONSOLIDADO_ANTECEDENTES": 46248,
+  "PG2_ESTADO_PROCESO_PENAL": 5,
+  "PG2_PROCESO_PENAL": 21200,
+  "PG2_TIPO_DELITO": 25,
+  "SERVER3_DEUDA_CR": 46000,
+  "SERVER3_DEUDOR_CENTRAL_RIESGOS": 40000,
+  "SERVER3_SCORE_RIESGO_CR": 40000,
+  "SERVER3_TIPO_ENTIDAD_FINANCIERA": 6
+ }
+}

@@ -65,19 +65,29 @@ gravamen as (
 -- el maestro de busqueda se arma con las dos fuentes.
 maestro as (
 
-    select
-        cliente_id,
-        {{ normalizar_identidad('c.numero_identificacion') }} as identidad
-    from {{ ref('stg_f1__cliente') }} c
+    select cliente_id, identidad
+    from (
+        select
+            cliente_id,
+            identidad,
+            row_number() over (partition by identidad order by cliente_id) as rn
+        from (
+            select
+                cliente_id,
+                {{ normalizar_identidad('c.numero_identificacion') }} as identidad
+            from {{ ref('stg_f1__cliente') }} c
+            where c.numero_identificacion is not null
 
-    union all
+            union all
 
-    -- el representante legal de una juridica tambien puede ser el titular
-    select
-        cliente_id,
-        {{ normalizar_identidad('c.ci_representante_legal') }} as identidad
-    from {{ ref('stg_f1__cliente') }} c
-    where c.ci_representante_legal is not null
+            select
+                cliente_id,
+                {{ normalizar_identidad('c.ci_representante_legal') }} as identidad
+            from {{ ref('stg_f1__cliente') }} c
+            where c.ci_representante_legal is not null
+        ) u
+    ) r
+    where rn = 1
 
 ),
 

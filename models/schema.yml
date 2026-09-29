@@ -1,43 +1,5 @@
 version: 2
 
-sources:
-  - name: bronze
-    description: "Bronze layer: 32 tablas cargadas por Airbyte desde 7 fuentes"
-    schema: CBRONZE
-    tables:
-      - name: ms1_cliente
-      - name: ms1_prestamo
-      - name: ms1_solicitud_credito
-      - name: ms1_pago
-      - name: ms1_garantia
-      - name: ms1_producto_crediticio
-      - name: ms1_agencia
-      - name: ms1_caracteristica_cliente
-      - name: ms1_informacion_laboral_solicitud
-      - name: ms1_tipo_rechazo
-      - name: pg2_proceso_penal
-      - name: pg2_consolidado_antecedentes
-      - name: pg2_categoria_delito
-      - name: pg2_tipo_delito
-      - name: pg2_estado_proceso_penal
-      - name: server3_deuda_cr
-      - name: server3_deudor_central_riesgos
-      - name: server3_score_riesgo_cr
-      - name: server3_tipo_entidad_financiera
-      - name: maria4_empresa_registro_mercantil
-      - name: maria4_accionista_representante_rm
-      - name: maria4_situacion_tributaria_rm
-      - name: maria4_tipo_empresa_rm
-      - name: ms5_bien_inmueble
-      - name: ms5_derecho_real_inscripcion
-      - name: ms5_tipo_derecho_real
-      - name: ms5_gravamen_garantia_prestamo
-      - name: csv6_historial_financiero_externo
-      - name: json7_usuarios_redes
-      - name: json7_publicaciones
-      - name: json7_reacciones
-      - name: json7_comentarios
-
 models:
   # ===========================================================================
   # STAGING
@@ -137,7 +99,7 @@ models:
   - name: stg_f3__score_riesgo_cr
     description: "Staging de score de riesgo (F3)."
     columns:
-      - name: score_id
+      - name: score_cr_id
         tests:
           - not_null
           - unique

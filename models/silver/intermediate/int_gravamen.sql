@@ -47,7 +47,22 @@ with gravamen as (
 
 garantia as (
 
-    select * from {{ ref('stg_f1__garantia') }}
+    select garantia_id, prestamo_id, tipo_garantia,
+           descripcion_bien, valor_avaluo_bs
+    from (
+        select
+            garantia_id,
+            prestamo_id,
+            tipo_garantia,
+            descripcion_bien,
+            valor_avaluo_bs,
+            row_number() over (
+                partition by prestamo_id
+                order by valor_avaluo_bs desc nulls last
+            ) as rn
+        from {{ ref('stg_f1__garantia') }}
+    ) g
+    where rn = 1
 
 ),
 
@@ -76,14 +91,14 @@ enriquecido as (
         case
             when g.fecha_liberacion is not null then 'Liberado'
             when g.fecha_inscripcion_gravamen is null then 'Sin fecha'
-            when g.fecha_inscripcion_gravamen > {{ var("fecha_corte") }}::date then 'No inscrito'
+            when g.fecha_inscripcion_gravamen > '{{ var("fecha_corte") }}'::date then 'No inscrito'
             else 'Vigente'
         end                                        as estado_gravamen_calculado,
 
         -- bandera para el tablero: el bien respalda al credito hoy o no
         case
             when g.fecha_liberacion is null
-             and g.fecha_inscripcion_gravamen <= {{ var("fecha_corte") }}::date
+             and g.fecha_inscripcion_gravamen <= '{{ var("fecha_corte") }}'::date
             then true
             else false
         end                                        as gravamen_vigente,

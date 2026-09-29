@@ -1,0 +1,197 @@
+# =============================================================================
+# dbt_project.yml  (ACTUALIZADO)
+# =============================================================================
+# Cambios respecto del original:
+#   1. vars de derechos reales (F5) y del crosswalk de identidad (F7)
+#   2. seeds deactivated: los catalogos maestros se cargan por DDL, no por seeds
+#   3. exposure de CAPAORO, para que Power BI seea lo que consume
+#   4. la serie de normalizacion se documenta aca como fuente de verdad
+# =============================================================================
+name: 'my_new_project'
+version: '2.0.0'
+config-version: 2
+profile: 'default'
+
+quoting:
+  database: false
+  schema: false
+  identifier: false
+
+model-paths: ["models"]
+macro-paths: ["macros"]
+test-paths: ["tests"]
+seed-paths: ["seeds"]
+analysis-paths: ["analyses"]
+snapshot-paths: ["snapshots"]
+
+vars:
+  # =====================================================================
+  # Umbrales de riesgo
+  # =====================================================================
+  score_morosidad_alto:      40
+  score_morosidad_medio:     70
+  dias_atraso_umbral:        90
+  fecha_corte:              '2026-09-16'
+
+  # =====================================================================
+  # Rango de la dimension tiempo
+  # =====================================================================
+  fecha_min_hechos:         '2020-01-01'
+  fecha_max_hechos:         '2026-12-31'
+
+  # =====================================================================
+  # Reglas de capacidad de pago
+  # =====================================================================
+  ratio_cuota_ingreso_ci:    1.5
+  ratio_cuota_ingreso_nit:   3.0
+  # Nuevo: umbral para el calculo SIN cruce con el prestamo, que es el que se
+  # puede calcular hoy porque el CSV de F6 no trae prestamo_id (ver P-11).
+  # Una juridica se evalua contra su facturacion; un ingreso minimo mensual
+  # equivalente se usa como umbral proporcional.
+  ingreso_minimo_mensual_nit: 8000
+
+  # =====================================================================
+  # Identidad y PII
+  # =====================================================================
+  # OJO IMPORTANTE: si pii_salt NO esta definido, hash_pii() usa SHA256 simple
+  # sobre el CI/NIT, que es reversible por fuerza bruta (el espacio de CI
+  # bolivianos es de orden 10^8). Definirla en el PERFIL de dbt, no aqui, para
+  # no versionar el secreto en el repositorio.
+  #   pii_salt: "{{ env_var('Dbt_PII_SALT') }}"
+  #
+  # Las 7 fuentes usan la MISMA serie de normalizacion, definida como dato en
+  # babsa_identidad.regla_normalizacion_identidad. El orden obligatorio es:
+  #   1 QUITAR_ESPACIOS   2 QUITAR_PUNTOS   3 QUITAR_GUIONES
+  #   4 QUITAR_PARENTESIS 5 MAYUSCULAS      6 PREFIJO_C (solo F6)
+  # Cualquier fuente nueva DEBE declarar su serie completa, y el test
+  # assert_normalizacion_completa lo verifica.
+
+  # =====================================================================
+  # Nuevas: derechos reales (F5)
+  # =====================================================================
+  # Umbral bajo el cual una garantia se considera sobre-garantizada. Con el
+#   2. seeds deactivated: los catalogos maestros se cargan por DDL, no por seeds
+  ltv_holgado:              0.40
+  ltv_ajustado:             0.80
+  # Antiguedad maxima aceptable de un avaluo, en anos. Un avaluo de hace 5 anos
+  # no sirve para decidir cobertura hoy.
+  avaluo_vigencia_max_anios: 3
+
+  # =====================================================================
+  # Nuevas: crosswalk de identidad (F7)
+  # =====================================================================
+  # Numero minimo de fuentes independientes para dar por confirmada una
+  # identidad. 1 sola fuente puede ser un error de tipeo.
+  xwalk_fuentes_minimas:     2
+
+models:
+  my_new_project:
+    silver:
+      +tags: ['silver']
+      staging:
+        +materialized: view
+        +schema: CAPAPLATA
+        +tags: ['silver', 'staging']
+      intermediate:
+        +materialized: table
+        +schema: CAPAPLATA
+        +tags: ['silver', 'intermediate']
+    gold:
+      +materialized: table
+      +schema: CAPAORO
+      +tags: ['gold']
+
+      # La tabla puente se materializa como tabla, no como vista: se usa para
+      # filtrar en el BI y una vista de 1.600 filas con 4 joins se recalcula
+      # en cada cambio de segmentacion.
+      bridge_cliente_empresa:
+        +materialized: table
+
+seeds:
+  my_new_project:
+    # Los catalogos maestros (tipo_identificacion, tipo_derecho_real,
+    # regla_normalizacion_identidad, xwalk_cliente) se cargan por DDL desde
+    # DDL_SOURCES_CORREGIDO.sql, no por seeds. Motivo: son datos maestros que
+    # requieren gobierno y trazabilidad fuera del repositorio de dbt.
+    # Ver seeds/README.md.
+    +schema: CAPAPLATA
+
+exposures:
+  - name: powerbi_dashboard_directivo
+    label: "Dashboard Directive (Power BI)"
+    description: >-
+      Vista de la cima del cubo: fact_cliente_360 + fact_riesgo + fact_prestamos.
+      Consume dim_cliente, dim_fecha, dim_agencia, dim_departamento,
+      dim_producto, dim_estado_prestamo, dim_entidad, dim_xwalk_identidad.
+
+    depends_on:
+      - ref('fact_cliente_360')
+      - ref('fact_riesgo')
+      - ref('fact_prestamos')
+      - ref('fact_deuda_externa')
+      - ref('dim_cliente')
+      - ref('dim_fecha')
+      - ref('dim_agencia')
+      - ref('dim_departamento')
+      - ref('dim_producto')
+      - ref('dim_estado_prestamo')
+      - ref('dim_entidad')
+      - ref('dim_xwalk_identidad')
+      - ref('bridge_cliente_empresa')
+
+  - name: powerbi_dashboard_cobranzas
+    label: "Dashboard Cobranzas (Power BI)"
+    description: >-
+      Ciclo de vida del credito: pagos por agencia, mora por bucket y producto.
+      Consume dim_prestamo (pseudodimension), dim_tipo_pago, dim_riesgo_categoria.
+    depends_on:
+      - ref('fact_pagos')
+      - ref('fact_prestamos')
+      - ref('dim_prestamo')
+      - ref('dim_tipo_pago')
+      - ref('dim_riesgo_categoria')
+      - ref('dim_cliente')
+      - ref('dim_agencia')
+      - ref('dim_departamento')
+      - ref('dim_fecha')
+
+  - name: powerbi_dashboard_garantias
+    label: "Dashboard Garantias (Power BI)"
+    description: >-
+      Cobertura real vs declarada, LTV, garantias de tercero. Es el panel que
+      justifica la BD de derechos reales (F5).
+    depends_on:
+      - ref('fact_derechos_reales')
+      - ref('fact_garantias')
+      - ref('dim_inmueble')
+      - ref('dim_tipo_derecho_real')
+      - ref('dim_tipo_garantia')
+      - ref('dim_estado_garantia')
+      - ref('dim_cliente')
+      - ref('dim_prestamo')
+      - ref('dim_fecha')
+
+  - name: powerbi_dashboard_credito
+    label: "Dashboard Embudo de Credito (Power BI)"
+    description: "Solicitudes, aprobacion y causas de rechazo. El panel que P-02 hacia imposible."
+    depends_on:
+      - ref('fact_solicitudes')
+      - ref('fact_prestamos')
+      - ref('dim_tipo_rechazo')
+      - ref('dim_producto')
+      - ref('dim_cliente')
+      - ref('dim_fecha')
+      - ref('dim_agencia')
+  - name: powerbi_dashboard_open_finance
+    label: "Dashboard Open Finance (Power BI)"
+    description: >-
+      Exposicion externa por institucion y por producto. El panel que responde
+      "en que bancos esta el cliente, por cuanto y a que tasa", que con la
+      version anterior no se podia preguntar porque Open Finance estaba
+      resumido a 3 columnas dentro de fact_cliente_360.
+    depends_on:
+      - ref('fact_open_finance')
+      - ref('dim_banco_externo')
+      - ref('dim_cliente')
+      - ref('dim_fecha')
+      - ref('dim_entidad')

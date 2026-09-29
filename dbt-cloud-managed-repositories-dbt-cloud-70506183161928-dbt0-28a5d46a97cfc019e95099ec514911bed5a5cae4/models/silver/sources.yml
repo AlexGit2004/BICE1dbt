@@ -1,0 +1,89 @@
+version: 2
+
+sources:
+  - name: bronze
+    description: >-
+      Capa Bronze: datos crudos de Airbyte con prefijos por fuente.
+      F1 MySQL core, F2 PostgreSQL penales, F3 SQL Server buro, F4 MariaDB
+      mercantil, F5 MySQL derechos reales, F5b MongoDB Open Finance,
+      F6 CSV situacion laboral, F7 MySQL datos maestros de identidad.
+      El DDL de referencia es DDL_SOURCES_CORREGIDO.sql.
+    database: AIRBYTE_DATABASE
+    schema: CAPABRONCE
+    tables:
+
+      # ============ F1 MySQL - core operacional (16 tablas) ====
+      # Las 16 estan conectadas: ningun catalogo huerfano.
+      - name: mysql_cliente
+        identifier: mysql_cliente
+        description: "Nucleo de identidad. numero_identificacion (CI/NIT) es la clave de negocio."
+      - name: mysql_caracteristica_cliente
+      - name: mysql_tipo_identificacion
+      - name: mysql_departamento
+      - name: mysql_tipo_producto
+      - name: mysql_producto_crediticio
+      - name: mysql_agencia
+      - name: mysql_solicitud_credito
+        description: "CORREGIDO: incluye tipo_rechazo_id (FK). Ver P-02."
+      - name: mysql_prestamo
+        description: "CORREGIDO: incluye estado_prestamo_id (FK) y fecha_vencimiento. Ver P-01."
+      - name: mysql_estado_prestamo_tipo
+      - name: mysql_tipo_rechazo
+        description: "CORREGIDO: ahora consumido por solicitud_credito.tipo_rechazo_id. Ver P-02."
+      - name: mysql_pago
+        description: "CORREGIDO: cliente_id se conserva en silver. Ver P-05."
+      - name: mysql_tipo_pago
+      - name: mysql_garantia
+        description: "CORREGIDO: incluye estado_garantia_id (FK). Ver P-06."
+      - name: mysql_tipo_garantia
+      - name: mysql_estado_garantia_tipo
+        description: "NUEVO: catalogo del ciclo de vida de la garantia."
+
+      # ============ F2 PostgreSQL - procesos penales (5) ====
+      - name: pgsql_categoria_delito
+      - name: pgsql_tipo_delito
+      - name: pgsql_estado_proceso_penal
+      - name: pgsql_proceso_penal
+        description: "CORREGIDO: numero_identificacion unico (antes numero_identificacion_acusado)."
+      - name: pgsql_consolidado_antecedentes
+
+      # ============ F3 SQL Server - central de riesgos (4) ====
+      - name: server_tipo_entidad_financiera
+      - name: server_deudor_central_riesgos
+      - name: server_deuda_cr
+        description: "CORREGIDO: entidad_financiera_id con FK declarada. Ver P-03 y P-04."
+      - name: server_score_riesgo_cr
+
+      # ============ F4 MariaDB - registro mercantil (4) ====
+      - name: maria_tipo_empresa_rm
+      - name: maria_empresa_registro_mercantil
+      - name: maria_accionista_representante_rm
+        description: "CORREGIDO: numero_identificacion NOT NULL + es_controlador."
+      - name: maria_situacion_tributaria_rm
+
+      # ============ F5 MySQL - derechos reales (4)  NUEVA ====
+      - name: mysql_tipo_derecho_real
+      - name: mysql_bien_inmueble
+      - name: mysql_derecho_real_inscripcion
+      - name: mysql_gravamen_garantia_prestamo
+        description: "Tabla puente entre el Registro de Derechos Reales y el credito colocado."
+
+      # ============ F5b MongoDB - Open Finance (2) ====
+      - name: mongo_open_finance_bancos
+        identifier: MONGO_BANCOS
+        description: "CORREGIDO: un documento por producto, campos aplanados. Ver P-10."
+      - name: mongo_open_finance_clientes_asociados
+        identifier: MONGO_CLIENTES_ASOCIADOS
+        description: "CORREGIDO: se resuelve ProductCustomer.UserId por el crosswalk F7. Ver P-10."
+
+      # ============ F6 CSV - situacion laboral (1) ====
+      - name: csv_situacion_laboral
+        description: "CORREGIDO: se resuelve id_cliente (C#####) por el crosswalk F7. Ver P-11."
+
+      # ============ F7 MySQL - datos maestros de identidad (3)  NUEVA ====
+      - name: mysql_xwalk_cliente
+        description: "Crosswalk: id nativo de cualquier fuente -> CI/NIT. Sin el, F5b y F6 no se procesan."
+      - name: mysql_regla_normalizacion_identidad
+        description: "Serie de reglas de normalizacion. Estandariza las 7 fuentes."
+      - name: mysql_xwalk_score
+        description: "Peso y autoridad de cada fuente como identificador."

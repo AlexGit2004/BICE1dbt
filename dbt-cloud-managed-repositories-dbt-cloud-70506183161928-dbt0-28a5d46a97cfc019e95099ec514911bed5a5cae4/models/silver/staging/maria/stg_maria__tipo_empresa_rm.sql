@@ -1,0 +1,25 @@
+with source as (
+    select * from {{ source('bronze', 'maria_tipo_empresa_rm') }}
+),
+
+renamed as (
+    select
+        cast(tipo_empresa_id as smallint) as tipo_empresa_id,
+        {{ limpiar_texto('NOMBRE_TIPO') }} as nombre_tipo_empresa,
+        _airbyte_extracted_at,
+        _airbyte_raw_id
+    from source
+),
+
+deduplicated as (
+    select *,
+        row_number() over (
+            partition by tipo_empresa_id
+            order by _airbyte_extracted_at desc nulls last,
+                     _airbyte_raw_id desc nulls last
+        ) as _rn
+    from renamed
+)
+
+select tipo_empresa_id, nombre_tipo_empresa
+from deduplicated where _rn = 1

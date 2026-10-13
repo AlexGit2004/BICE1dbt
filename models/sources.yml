@@ -19,7 +19,7 @@ sources:
       Capa Bronze. 32 tablas, 4.537.707 filas, 469.73 MB, cargadas por
       COPY INTO desde stage. Es la foto fiel de las 7 fuentes de origen,
       sin transformar.
-    schema: CBRONZE
+    schema: '"1CAPABRONZE"'
     database: AIRBYTE_DATABASE
     loader: SNOWFLAKE_CSV
 

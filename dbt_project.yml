@@ -3,9 +3,9 @@
 # =============================================================================
 # Capa   Origen        Destino     Materializacion
 # ------ ------------- ----------- -----------------
-# stg    CBRONZE       CSILVER     view      (1 vista por tabla Bronze)
-# int    CSILVER       CSILVER     table     (conformacion e integracion)
-# gold   CSILVER       CGOLD       table     (dimensiones y hechos)
+# stg    1CAPABRONZE   2CAPAPLATA  view
+# int    2CAPAPLATA    2CAPAPLATA  table
+# gold   2CAPAPLATA    3CAPAORO    table
 #
 # Este proyecto NO hereda el diseno de ce1: se construye desde la metadata
 # real de CBRONZE. Las unicas piezas tomadas de ahi son la sintaxis de dbt
@@ -26,7 +26,7 @@ profile: 'ce1copy'
 # en information_schema con el mismo nombre.
 quoting:
   database: false
-  schema: false
+  schema: true
   identifier: false
 
 model-paths: ["models"]
@@ -83,13 +83,13 @@ models:
       +tags: ['silver']
       staging:
         +materialized: view
-        +schema: CSILVER
+        +schema: 2CAPAPLATA
         +tags: ['silver', 'staging']
       intermediate:
         +materialized: table
-        +schema: CSILVER
+        +schema: 2CAPAPLATA
         +tags: ['silver', 'intermediate']
     gold:
       +materialized: table
-      +schema: CGOLD
+      +schema: 3CAPAORO
       +tags: ['gold']

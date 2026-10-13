@@ -4,7 +4,7 @@ sources:
   - name: bronze
     description: "Capa Bronze — datos crudos de Airbyte con prefijos por fuente"
     database: "{{ env_var('AIRBYTE_DATABASE', 'AIRBYTE') }}"
-    schema: CAPABRONCE
+    schema: '"1CAPABRONCE"'
     tables:
       # ============ F1 MySQL — core operacional ============
       - name: mysql_cliente
@@ -47,5 +47,5 @@ sources:
       - name: mongo_open_finance_bancos
       - name: mongo_open_finance_clientes_asociados
 
-      # ============ F6 CSV — situación laboral ============
+      # ============ F5 MongoDB — Open Finance ============
       - name: csv_situacion_laboral

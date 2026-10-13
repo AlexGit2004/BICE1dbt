@@ -1,0 +1,721 @@
+version: 2
+
+# ============================================================================
+# gold.yml  (REESCRITO)
+# ============================================================================
+# REGLA 4: cada FK de la estrella tiene un test `relationships` que verifica
+# que su valor existe en la dimension padre. Eso convierte "sin conexiones
+# rotas" en algo que el pipeline comprueba en cada build, y no en algo que
+# alguien afirma en un documento.
+#
+# REGLA 3: las 3 dimensiones que estaban huerfanas ahora tienen hechos que las
+# referencian, con su test:
+#   dim_entidad            <- fact_deuda_externa.entidad_key
+#   dim_empresa            <- bridge_cliente_empresa.empresa_key
+#   dim_riesgo_categoria   <- fact_riesgo.categoria_riesgo_key  (FK que no existia)
+#   dim_tipo_rechazo       <- fact_solicitudes.tipo_rechazo_key  (FK que no existia)
+#   dim_estado_prestamo    <- fact_prestamos.estado_prestamo_key  (FK que era NULL)
+# ============================================================================
+
+models:
+
+  # ==========================================================================
+  # DIMENSIONES CONFORMADAS
+  # ==========================================================================
+  - name: dim_cliente
+    description: >-
+      Nucleo del DW. 1 fila por CI/NIT, sin duplicados: los id genericos de
+      F1/F3/F4 se descartan como clave y sobreviven como atributos de linaje
+      (cliente_id_legacy, id_origen_f*). Grano: 1 por persona o empresa.
+      Todas las fuentes externas convergen aqui.
+    columns:
+      - name: cliente_key
+        description: "PK fisica = hash(CI/NIT). Es la FK de las 7 estrellas."
+        data_tests: [unique, not_null]
+      - name: cliente_id
+        description: "PK NATURAL = el CI o NIT. Unica clave de negocio del DW."
+        data_tests: [unique, not_null]
+      - name: numero_id_hash
+        description: "Hash del CI/NIT. Todos los cruces son hash-contra-hash."
+        data_tests: [unique, not_null]
+      - name: estado_riesgo
+        data_tests:
+          - accepted_values:
+              arguments:
+                values: ['Bajo','Medio','Alto']
+      - name: tipo_persona
+        data_tests:
+          - accepted_values:
+              arguments:
+                values: ['Natural','Juridica','Desconocido']
+      - name: tiene_proceso_activo
+        data_tests: [not_null]
+      - name: cumple_capacidad_pago
+        data_tests: [not_null]
+
+  - name: dim_xwalk_identidad
+    description: >-
+      Tabla de identidad auditable. 1:1 con dim_cliente. Hace visible, cliente
+      por cliente, cuantas fuentes independientes respaldan la identidad y como
+      se resolvio. Sin esta dimension, el crosswalk seria un CASE invisible.
+    columns:
+      - name: xwalk_key
+        data_tests: [unique, not_null]
+      - name: numero_id_hash
+        description: "1:1 con dim_cliente.numero_id_hash"
+        data_tests:
+          - unique
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('dim_cliente')
+                field: numero_id_hash
+      - name: confianza_ponderada
+        data_tests:
+          - not_null
+          - accepted_values:
+              arguments:
+                is: 'not_null'
+
+  - name: dim_fecha
+    description: "Espina temporal. Se une por ROL, nunca por una fecha_key a secas."
+    columns:
+      - name: fecha_key
+        description: "YYYYMMDD entero"
+        data_tests: [unique, not_null]
+      - name: fecha
+        data_tests: [unique, not_null]
+      - name: anio
+        data_tests: [not_null]
+
+  - name: dim_producto
+    columns:
+      - name: producto_key
+        data_tests: [unique, not_null]
+      - name: producto_id
+        data_tests: [unique, not_null]
+
+  - name: dim_agencia
+    columns:
+      - name: agencia_key
+        data_tests: [unique, not_null]
+      - name: agencia_id
+        data_tests: [unique, not_null]
+      - name: depto_key
+        description: "FK a dim_departamento"
+        data_tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('dim_departamento')
+                field: depto_key
+
+  - name: dim_departamento
+    columns:
+      - name: depto_key
+        data_tests: [unique, not_null]
+      - name: depto_id
+        data_tests: [unique, not_null]
+
+  # ==========================================================================
+  # DIMENSIONES DE CICLO DE VIDA  (las que eran huerfanas o sin FK)
+  # ==========================================================================
+  - name: dim_estado_prestamo
+    description: "P-01: antes su FK en fact_prestamos era hash(NULL) en el 100% de las filas."
+    columns:
+      - name: estado_prestamo_key
+        data_tests: [unique, not_null]
+      - name: estado_prestamo_id
+        data_tests: [unique, not_null]
+      - name: es_estado_terminal
+        data_tests: [not_null]
+
+  - name: dim_tipo_pago
+    columns:
+      - name: tipo_pago_key
+        data_tests: [unique, not_null]
+      - name: tipo_pago_id
+        data_tests: [unique, not_null]
+
+  - name: dim_tipo_garantia
+    description: "es_inmueble separa la garantia verificable (F5) de la prendaria."
+    columns:
+      - name: tipo_garantia_key
+        data_tests: [unique, not_null]
+      - name: tipo_garantia_id
+        data_tests: [unique, not_null]
+      - name: es_inmueble
+        data_tests:
+          - not_null
+          - accepted_values:
+              arguments:
+                is: 'not_null'
+
+  - name: dim_tipo_rechazo
+    description: >-
+      P-02: este catalogo de 15 motivos existia desde el DDL original y NINGUNA
+      tabla lo referenciaba. Ahora es dimension, con fact_solicitudes.tipo_rechazo_key.
+    columns:
+      - name: tipo_rechazo_key
+        data_tests: [unique, not_null]
+      - name: tipo_rechazo_id
+        data_tests: [unique, not_null]
+      - name: categoria
+        data_tests: [not_null]
+      - name: familia_motivo
+        data_tests: [not_null]
+
+  - name: dim_estado_garantia
+    description: "P-06: el estado de la garantia es informacion legal. Antes se descartaba."
+    columns:
+      - name: estado_garantia_key
+        data_tests: [unique, not_null]
+      - name: estado_garantia_id
+        data_tests: [unique, not_null]
+      - name: permite_reexigir
+        data_tests: [not_null]
+
+  # ==========================================================================
+  # DIMENSIONES DE RIESGO  (la que estaba ROTA y la nueva que la separa)
+  # ==========================================================================
+  - name: dim_riesgo_categoria
+    description: >-
+      P-07: antes mezclaba con `union` el dominio de BURO ('Riesgo Alto') con el
+      de DELITO ('Violento'), y fact_riesgo hasheaba el SEMAFORO ('Alto'), con lo
+      que la FK no encontraba padre nunca. Ahora solo contiene el dominio de
+      riesgo, con origen_categoria = 'SCORE_CR'.
+    columns:
+      - name: categoria_key
+        data_tests: [unique, not_null]
+      - name: categoria
+        data_tests: [unique, not_null]
+      - name: origen_categoria
+        data_tests:
+          - accepted_values:
+              arguments:
+                values: ['SCORE_CR']
+      - name: nivel_normalizado
+        data_tests:
+          - accepted_values:
+              arguments:
+                values: ['Alto','Medio','Bajo','Sin clasificar']
+
+  - name: dim_delito_categoria
+    description: >-
+      P-07: el dominio de delito, separado del de riesgo. Antes vivia dentro de
+      dim_riesgo_categoria y contaminaba la FK de fact_riesgo.
+    columns:
+      - name: delito_categoria_key
+        data_tests: [unique, not_null]
+      - name: delito_categoria_id
+        data_tests: [unique, not_null]
+      - name: categoria_delito
+        data_tests: [not_null]
+
+  - name: dim_entidad
+    description: >-
+      REGLA 3: estaba HUERFANA. Ninguna fact la referenciaba porque
+      int_riesgo_central descartaba entidad_financiera_id al agregar. Ahora
+      fact_deuda_externa la referencia con entidad_key, y dim_cliente expone
+      entidad_principal_id para el caso "en que banco esta mas expuesto".
+    columns:
+      - name: entidad_key
+        data_tests: [unique, not_null]
+      - name: entidad_id
+        data_tests: [unique, not_null]
+      - name: tipo_entidad
+        data_tests: [not_null]
+      - name: factor_prioridad_cobro
+        data_tests: [not_null]
+
+  - name: dim_empresa
+    description: >-
+      REGLA 3: estaba HUERFANA y SIN PUENTE. El puente NIT = CI/NIT existia en
+      los datos pero ninguna fact lo usaba. Ahora bridge_cliente_empresa la
+      referencia, y nit es la clave de negocio (empresa_id es un autoincremental
+      que no sirve para cruzar).
+    columns:
+      - name: empresa_key
+        data_tests: [unique, not_null]
+      - name: empresa_id
+        data_tests: [unique, not_null]
+      - name: nit
+        description: "PK de negocio. Equals dim_cliente.cliente_id cuando tipo_id = 2"
+        data_tests: [unique, not_null]
+      - name: numero_id_hash
+        description: "El puente hasheado hacia el nucleo"
+        data_tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('dim_cliente')
+                field: numero_id_hash
+      - name: es_moroso_tributario
+        data_tests: [not_null]
+
+  # ==========================================================================
+  # DIMENSIONES DE F5 - DERECHOS REALES  (NUEVAS)
+  # ==========================================================================
+  - name: dim_inmueble
+    description: >-
+      Cierra la garantia INMUEBLE que el catalogo tipo_garantia declaraba sin
+      respaldo. La PK de negocio es matricula_inmueble; inmueble_id es el
+      autoincremental y no se usa para cruzar.
+    columns:
+      - name: inmueble_key
+        data_tests: [unique, not_null]
+      - name: inmueble_id
+        data_tests: [unique, not_null]
+      - name: matricula_inmueble
+        description: "PK NATURAL. Identifica el bien en el Registro de Derechos Reales."
+        data_tests: [unique, not_null]
+      - name: valor_avaluo_bs
+        data_tests: [not_null]
+      - name: vigencia_avaluo
+        data_tests: [not_null]
+
+  - name: dim_tipo_derecho_real
+    description: >-
+      Catalogo del Codigo Civil. CONVIVE con dim_tipo_garantia: el derecho real
+      describe el DERECHO sobre el bien (registro del Estado) y tipo_garantia el
+      USO del bien como respaldo (catalogo del banco). La union de ambos es lo
+      que distingue una hipoteca INSCRITA de una declaracion.
+    columns:
+      - name: tipo_derecho_real_key
+        data_tests: [unique, not_null]
+      - name: tipo_derecho_real_id
+        data_tests: [unique, not_null]
+      - name: es_garantia
+        data_tests: [not_null]
+      - name: definicion_inconsistente
+        description: "Un derecho no puede ser garantia y transmision a la vez"
+        data_tests:
+          - accepted_values:
+              arguments:
+                values: [false]
+
+  # ==========================================================================
+  # PSEUDO-DIMENSION
+  # ==========================================================================
+  - name: dim_prestamo
+    description: >-
+      PSEUDO-DIMENSION declarada: grano de hecho (1 prestamo = 1 fila) con
+      medidas, usada como dimension SLEUT para analizar pagos y garantias dentro
+      del ciclo de vida del credito. NO hacer SUM(saldo_actual_bs) cruzando
+      fact_pagos con esta tabla: el saldo se contaria una vez por pago. Para eso
+      esta fact_derechos_reales, que baja el saldo al grano del gravamen.
+    columns:
+      - name: prestamo_key
+        data_tests: [unique, not_null]
+      - name: prestamo_id
+        data_tests: [unique, not_null]
+      - name: cliente_key
+        data_tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('dim_cliente')
+                field: cliente_key
+      - name: estado_prestamo_key
+        data_tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('dim_estado_prestamo')
+                field: estado_prestamo_key
+
+  # ==========================================================================
+  # HECHOS
+  # ==========================================================================
+  - name: fact_prestamos
+    description: "Grano: 1 fila = 1 prestamo. 5 dimensiones + 2 ROLES de fecha."
+    columns:
+      - name: prestamo_id
+        data_tests: [unique, not_null]
+      - name: cliente_key
+        data_tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('dim_cliente')
+                field: cliente_key
+      - name: producto_key
+        data_tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('dim_producto')
+                field: producto_key
+      - name: agencia_key
+        data_tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('dim_agencia')
+                field: agencia_key
+      - name: estado_prestamo_key
+        description: "P-01: antes era hash(NULL) en el 100% de las filas"
+        data_tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('dim_estado_prestamo')
+                field: estado_prestamo_key
+      - name: fecha_originacion_key
+        data_tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('dim_fecha')
+                field: fecha_key
+      - name: fecha_vencimiento_key
+        description: "ROL distinto. Un prestamo tiene 2 fechas, no 1."
+        data_tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('dim_fecha')
+                field: fecha_key
+
+  - name: fact_pagos
+    description: "Grano: 1 fila = 1 pago. 250.000 filas."
+    columns:
+      - name: pago_id
+        data_tests: [unique, not_null]
+      - name: prestamo_key
+        data_tests:
+          - relationships:
+              arguments:
+                to: ref('dim_prestamo')
+                field: prestamo_key
+      - name: cliente_key
+        description: "P-05: sale del propio pago, no de recorrer dim_prestamo"
+        data_tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('dim_cliente')
+                field: cliente_key
+      - name: tipo_pago_key
+        data_tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('dim_tipo_pago')
+                field: tipo_pago_key
+      - name: fecha_pago_key
+        data_tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('dim_fecha')
+                field: fecha_key
+
+  - name: fact_solicitudes
+    description: "Grano: 1 fila = 1 solicitud. Embudo de entrada del credito."
+    columns:
+      - name: solicitud_id
+        data_tests: [unique, not_null]
+      - name: cliente_key
+        data_tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('dim_cliente')
+                field: cliente_key
+      - name: producto_key
+        data_tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('dim_producto')
+                field: producto_key
+      - name: tipo_rechazo_key
+        description: "P-02: la FK que no existia. Convierte un catalogo huerfano en dimension."
+        data_tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('dim_tipo_rechazo')
+                field: tipo_rechazo_key
+      - name: fecha_solicitud_key
+        data_tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('dim_fecha')
+                field: fecha_key
+
+  - name: fact_garantias
+    description: "Grano: 1 fila = 1 garantia. Contraste declarado vs verificado."
+    columns:
+      - name: garantia_id
+        data_tests: [unique, not_null]
+      - name: prestamo_key
+        data_tests:
+          - relationships:
+              arguments:
+                to: ref('dim_prestamo')
+                field: prestamo_key
+      - name: cliente_key
+        data_tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('dim_cliente')
+                field: cliente_key
+      - name: tipo_garantia_key
+        data_tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('dim_tipo_garantia')
+                field: tipo_garantia_key
+      - name: estado_garantia_key
+        description: "P-06: el ciclo de vida de la garantia, que se perdia"
+        data_tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('dim_estado_garantia')
+                field: estado_garantia_key
+      - name: fecha_valoracion_key
+        data_tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('dim_fecha')
+                field: fecha_key
+
+  - name: fact_riesgo
+    description: >-
+      Grano: 1 evaluacion por cliente por fecha. PK = score_id = hash(cliente_key,
+      fecha_evaluacion_key). P-17: antes no tenia PK y cada corrida pisaba la fila,
+      sin historico de score.
+    columns:
+      - name: score_id
+        data_tests: [unique, not_null]
+      - name: cliente_key
+        data_tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('dim_cliente')
+                field: cliente_key
+      - name: categoria_riesgo_key
+        description: "P-07: la FK rota. Ahora hashea el valor real de la categoria del buro"
+        data_tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('dim_riesgo_categoria')
+                field: categoria_key
+      - name: delito_categoria_key
+        data_tests:
+          - relationships:
+              arguments:
+                to: ref('dim_delito_categoria')
+                field: delito_categoria_key
+      - name: fecha_evaluacion_key
+        description: "P-18: antes usaba current_date. Ahora usa var('fecha_corte')"
+        data_tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('dim_fecha')
+                field: fecha_key
+      - name: score_combinado
+        data_tests:
+          - not_null
+          - accepted_values:
+              arguments:
+                min_value: 0
+                max_value: 100
+
+  - name: fact_cliente_360
+    description: "Grano: 1 fila = 1 cliente. Vista agregada de la cima del cubo. 1:1 con dim_cliente."
+    columns:
+      - name: cliente_key
+        data_tests:
+          - unique
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('dim_cliente')
+                field: cliente_key
+      - name: estado_riesgo
+        data_tests: [not_null]
+      - name: ratio_endeudamiento
+        description: "NULL cuando no hay ingreso mensual. No se rellena con 0 a proposito."
+        data_tests: [not_null]
+
+  # ==========================================================================
+  # HECHOS NUEVOS  (son los que le dan relacion a las dimensiones huerfanas)
+  # ==========================================================================
+  - name: fact_deuda_externa
+    description: >-
+      REGLA 3: la fact que rescata a dim_entidad. Grano: 1 deudor x 1 entidad
+      acreedora x 1 fecha de consulta. Responde "de cuanto estoy expuesto en cada
+      banco", que antes no se podia preguntar.
+    columns:
+      - name: deuda_id
+        data_tests: [unique, not_null]
+      - name: entidad_key
+        description: "LA FK que le da vida a dim_entidad"
+        data_tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('dim_entidad')
+                field: entidad_key
+      - name: cliente_key
+        data_tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('dim_cliente')
+                field: cliente_key
+      - name: fecha_consulta_key
+        data_tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('dim_fecha')
+                field: fecha_key
+      - name: fecha_originacion_key
+        data_tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('dim_fecha')
+                field: fecha_key
+
+  - name: fact_derechos_reales
+    description: >-
+      F5. Grano: 1 gravamen inscrito. Hace verificable la cobertura de la
+      garantia: cobertura_real contra el avaluo, y ltv_pct como nueva medida.
+    columns:
+      - name: gravamen_id
+        data_tests: [unique, not_null]
+      - name: cliente_key
+        data_tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('dim_cliente')
+                field: cliente_key
+      - name: prestamo_key
+        data_tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('dim_prestamo')
+                field: prestamo_key
+      - name: inmueble_key
+        data_tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('dim_inmueble')
+                field: inmueble_key
+      - name: tipo_derecho_real_key
+        data_tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('dim_tipo_derecho_real')
+                field: tipo_derecho_real_key
+      - name: fecha_inscripcion_key
+        data_tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('dim_fecha')
+                field: fecha_key
+      - name: fecha_liberacion_key
+        data_tests:
+          - relationships:
+              arguments:
+                to: ref('dim_fecha')
+                field: fecha_key
+      - name: estado_gravamen
+        data_tests: [not_null]
+
+  # ==========================================================================
+  # TABLA PUENTE
+  # ==========================================================================
+  - name: bridge_cliente_empresa
+    description: >-
+      REGLA 3: el puente NIT <-> CI/NIT que le faltaba a dim_empresa. Grano:
+      1 cliente x 1 empresa x 1 tipo de vinculo. Responde "el cliente juridico que
+      nos debe es controlador de una empresa que tambien nos debe?".
+    columns:
+      - name: puente_key
+        data_tests: [unique, not_null]
+      - name: cliente_key
+        data_tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('dim_cliente')
+                field: cliente_key
+      - name: empresa_key
+        description: "LA FK que le da vida a dim_empresa"
+        data_tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('dim_empresa')
+                field: empresa_key
+      - name: tipo_vinculo
+        data_tests:
+          - accepted_values:
+              arguments:
+                values: ['LA_EMPRESA','ES_ACCIONISTA','ES_REPRESENTANTE','ES_ACREEDORA']
+  - name: dim_banco_externo
+    description: >-
+      Catalogo de instituciones que publican datos via Open Finance. El nombre
+      del BANCO es el catalogo; el producto es un atributo de la exposicion y
+      vive en fact_open_finance.
+    columns:
+      - name: banco_externo_key
+        data_tests: [unique, not_null]
+      - name: banco_nombre
+        data_tests: [unique, not_null]
+      - name: tipo_institucion
+        data_tests: [not_null]
+      - name: factor_prioridad_cobro
+        data_tests: [not_null]
+
+  - name: fact_open_finance
+    description: >-
+      REGLA 2: estrella de la exposicion externa. Grano: 1 producto externo
+      asignado a 1 cliente. Aporta el indicador que la version anterior no
+      tenia: la tasa maxima que el cliente ya esta pagando en otros bancos.
+    columns:
+      - name: asignacion_id
+        data_tests: [unique, not_null]
+      - name: cliente_key
+        data_tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('dim_cliente')
+                field: cliente_key
+      - name: banco_externo_key
+        description: "LA FK que da vida a dim_banco_externo"
+        data_tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('dim_banco_externo')
+                field: banco_externo_key
+      - name: fecha_apertura_key
+        data_tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('dim_fecha')
+                field: fecha_key
+      - name: es_producto_activo
+        data_tests: [not_null]

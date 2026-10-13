@@ -1,0 +1,95 @@
+# =============================================================================
+# ce1copy - Proyecto dbt propio
+# =============================================================================
+# Capa   Origen        Destino     Materializacion
+# ------ ------------- ----------- -----------------
+# stg    1CAPABRONZE   2CAPAPLATA  view
+# int    2CAPAPLATA    2CAPAPLATA  table
+# gold   2CAPAPLATA    3CAPAORO    table
+#
+# Este proyecto NO hereda el diseno de ce1: se construye desde la metadata
+# real de CBRONZE. Las unicas piezas tomadas de ahi son la sintaxis de dbt
+# que quedo probada (override de generate_schema_name, tests singulares) y
+# la convencion de nombres stg_/int_.
+#
+# EXPOSURES: viven en models/exposures.yml, NO aca. dbt Fusion 2.0.6
+# rechaza label/description/depends_on dentro de dbt_project.yml.
+# =============================================================================
+
+name: 'ce1copy'
+version: '1.0.0'
+config-version: 2
+profile: 'ce1copy'
+
+# Sin comillas: Snowflake normaliza a mayusculas solo. Evita el problema
+# clasico de dbt+Snowflake donde una tabla creada en minusculas no aparece
+# en information_schema con el mismo nombre.
+quoting:
+  database: false
+  schema: true
+  identifier: false
+
+model-paths: ["models"]
+macro-paths: ["macros"]
+test-paths: ["tests"]
+seed-paths: ["seeds"]
+analysis-paths: ["analyses"]
+snapshot-paths: ["snapshots"]
+
+# -----------------------------------------------------------------------------
+# vars: las reglas de negocio viven aqui, no dentro de los .sql
+# -----------------------------------------------------------------------------
+vars:
+  fecha_corte: '2026-09-29'
+
+  # --- Riesgo y mora -------------------------------------------------------
+  # Cortes de mora en dias. El ultimo coincide con el umbral que decide si el
+  # atraso se considera vigente, para que "bucket Critica" y "tiene mora
+  # vigente" nunca puedan contradecirse.
+  dias_mora_leve: 30
+  dias_mora_moderada: 60
+  dias_mora_severa: 90
+  umbral_mora_vigente: 90
+
+  # --- Puntajes de riesgo --------------------------------------------------
+  score_riesgo_alto: 40
+  score_riesgo_medio: 70
+  score_mora_maximo: 100
+
+  # --- Cobertura de garantia ----------------------------------------------
+  # Fraccion maxima del credito que se acepta cubrir con un avaluo.
+  ltv_maximo_aceptable: 0.80
+  # Antiguedad maxima de un avaluo en anos para que siga siendo vigente.
+  avaluo_vigencia_max_anios: 3
+
+  # --- Capacidad de pago ---------------------------------------------------
+  # Cuota maxima como proporcion del ingreso, por tipo de titular.
+  ratio_cuota_ingreso_ci: 1.5
+  ratio_cuota_ingreso_nit: 3.0
+  ingreso_minimo_mensual_nit: 8000
+
+  # --- Identidad -----------------------------------------------------------
+  # Numero minimo de fuentes independientes para dar por confirmada una
+  # identidad. Una sola fuente puede ser un error de tipeo.
+  identidad_fuentes_minimas: 2
+
+  # --- Redes sociales (F7) -------------------------------------------------
+  # Volumen de F7 ya escalado; se conserva tal cual en el pipeline.
+  redes_escala_origen: 0.8858
+
+models:
+  ce1copy:
+    silver:
+      +tags: ['silver']
+      staging:
+        +materialized: view
+        +schema: 2CAPAPLATA
+        +tags: ['silver', 'staging']
+      intermediate:
+        +materialized: table
+        +schema: 2CAPAPLATA
+        +tags: ['silver', 'intermediate']
+    gold:
+      +materialized: table
+      +schema: 3CAPAORO
+      +tags: ['gold']

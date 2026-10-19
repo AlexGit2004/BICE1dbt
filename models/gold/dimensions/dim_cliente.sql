@@ -95,7 +95,7 @@ select
         then true
         else false
     end                                        as tiene_problemas_tributarios,
-    'F1+F2+F3+F4'                              as fuente
+    'F1+F2+F3+F4+F6'                           as fuente
 from identidad i
 left join riesgo r
        on i.cliente_id = r.cliente_id

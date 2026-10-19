@@ -159,6 +159,7 @@ sources:
 
       # --- F6: CSV, historial financiero externo (1 tabla) -------------------
       - name: csv6_historial_financiero_externo
+        identifier: '"CSV6_HISTORIAL_FINANCIERO_EXTERNO.CSV"'
         description: >-
           Historial financiero externo, 33.840 filas = 60% exacto de los
           56.400 clientes de F1. El CI viene con guion o espacio como
@@ -169,7 +170,7 @@ sources:
             tests: [not_null]
 
       # --- F7: JSON, redes sociales (4 tablas) -------------------------------
-      - name: json7_usuarios_redes
+      - name: json7_usuarios
         description: "Usuarios de redes, 77.948 filas. El id de red NO es el CI."
 
       - name: json7_comentarios

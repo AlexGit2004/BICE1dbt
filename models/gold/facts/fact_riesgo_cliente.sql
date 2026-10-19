@@ -72,5 +72,5 @@ select
     calificacion_asfi,
     estado_tributario,
     impuestos_adeudados,
-    'F2+F3+F4'                                 as fuente
+    'F2+F3+F4+F6'                              as fuente
 from {{ ref('int_riesgo_cliente') }}

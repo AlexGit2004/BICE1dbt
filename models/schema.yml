@@ -439,3 +439,11 @@ models:
         tests:
           - not_null
           - unique
+
+  - name: fact_social
+    description: "Hecho de interacciones en redes sociales (reacciones y comentarios)."
+    columns:
+      - name: id_interaccion
+        tests:
+          - not_null
+
